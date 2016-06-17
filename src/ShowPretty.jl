@@ -19,15 +19,15 @@ const floatsep   = [groupSeparator] ; floatSep=()->floatsep[1]
 #  make numeric strings easier to read
 
 stringpretty{T<:Signed}(val::T, 
-  groupsize::Int=groupLength(), separator::Char=intSep()) =
+  groupsize::Int=intGroup(), separator::Char=intSep()) =
     prettyInteger(val, groupsize, separator)
 
 stringpretty{T<:AbstractFloat}(
-  val::T, groupsize::Int=groupLength(), 
+  val::T, groupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     prettyFloat(val, groupsize, iseparator, fseparator)
 
-function stringpretty{T<:Real}(val::T, groupsize::Int=groupLength(), 
+function stringpretty{T<:Real}(val::T, groupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep())
     if !prettyfiable(v)
        throw(ErrorException("type $T is not supported"))
@@ -39,33 +39,33 @@ end
 # show easy-to-read numbers
 
 function showpretty(io::IO, 
-  val::Signed, groupsize::Int=groupLength(), separator::Char=intSep())
+  val::Signed, groupsize::Int=intGroup(), separator::Char=intSep())
     s = prettyInteger(val, groupsize, separator)
     print(io, s)
 end
 
 function showpretty(io::IO, 
-  val::AbstractFloat, groupsize::Int=groupLength(), 
+  val::AbstractFloat, groupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep())
     s = prettyFloat(val, groupsize, iseparator, fseparator)
     print(io, s)
 end
 
 function showpretty{T<:Real}(io::IO, 
-  val::T, groupsize::Int=groupLength(), 
+  val::T, groupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep())
     s = stringpretty(val, groupsize, iseparator, fseparator)
     print(io, s)
 end
 
-showpretty(val::Signed, groupsize::Int=groupLength(), separator::Char=intSep()) =
+showpretty(val::Signed, groupsize::Int=intGroup(), separator::Char=intSep()) =
     showpretty(Base.STDOUT, val, groupsize, separator)
 
-showpretty(val::AbstractFloat, groupsize::Int=groupLength(), 
+showpretty(val::AbstractFloat, groupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
     
-showpretty{T<:Real}(val::T, groupsize::Int=groupLength(), 
+showpretty{T<:Real}(val::T, groupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
 
