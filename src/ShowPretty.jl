@@ -2,7 +2,7 @@ module ShowPretty
 
 export showpretty
 
-const separator = "_"
+const separator = '_'
 
 function integerString(s::String, groupsize::Int=5)
    numsign = (s[1] == "-") ? "-" : ""
