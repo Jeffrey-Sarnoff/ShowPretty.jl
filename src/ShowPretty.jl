@@ -38,13 +38,14 @@ function integerString(s::String, groupsize::Int=5)
 end
 
 function fractionalString(s::String, groupsize::Int=5)
-   if "e" in s
-       sfrac, sexponent = split(s,"e")
-    else
-       sfrac, sexponent = s, ""
-    end
+    sfrac, sexponent =
+        if "e" in s
+           split(s,"e")
+        else
+           s, ""
+        end
     
-    pretty = reverse(integerString(reverse(sfrac), groupsize)))
+    pretty = reverse(integerString(reverse(sfrac), groupsize))
     
     if sexponent != ""
        join(pretty,sexponent,"e")
