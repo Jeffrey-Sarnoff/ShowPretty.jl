@@ -9,12 +9,15 @@ function integerString(s::String, groupsize::Int=5)
    if (s[1]=="-") s=s[2:end] end
    n = length(s)
    fullgroups, finalgroup = divrem(n, groupsize)
-   pretty = repeat(" ", n+(fullgroups-1)+(finalgroup!=0)+length(numsign))
+   p = repeat(" ", n+(fullgroups-1)+(finalgroup!=0)+length(numsign))
+   
+   sv = convert(Vector{Char},s)
+   pretty = convert(Vector{Char},p)
    
    sourceidx = n
    targetidx = length(pretty)
    for k in fullgroups:-1:1
-       pretty[(targetidx-groupsize+1):targetidx] = s[(sourceidx-groupsize+1):sourceidx]
+       pretty[(targetidx-groupsize+1):targetidx] = sv[(sourceidx-groupsize+1):sourceidx]
        sourceidx -= groupsize
        targetidx -= groupsize
        if k > 1
@@ -26,7 +29,7 @@ function integerString(s::String, groupsize::Int=5)
    if finalgroup > 0
        pretty[targetidx] = separator
        targetidx -= 1
-       pretty[(targetidx-finalgroup+1):targetidx] = s[(sourceidx-finalgroup+1):sourceidx]
+       pretty[(targetidx-finalgroup+1):targetidx] = sv[(sourceidx-finalgroup+1):sourceidx]
        targetidx -= 1
    end
    if numsign == "-"
@@ -34,7 +37,7 @@ function integerString(s::String, groupsize::Int=5)
        pretty[targetidx] = "-"
    end
    
-   pretty
+   convert(String, pretty)
 end
 
 function fractionalString(s::String, groupsize::Int=5)
