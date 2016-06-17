@@ -64,7 +64,8 @@ function nonnegIntegerString(s::String,
     end
 end
 
-function integerString(s::String, groupsize::Int=grouplength[1], separator::Char=underscore)
+function integerString(s::String, 
+  groupsize::Int=grouplength[1], separator::Char=underscore)
     if s[1] != "-"
        nonnegIntegerString(s, groupsize, separator)
     else
@@ -74,7 +75,8 @@ function integerString(s::String, groupsize::Int=grouplength[1], separator::Char
     end    
 end    
 
-function fractionalString(s::String, groupsize::Int=grouplength[1], separator::Char=underscore)
+function fractionalString(s::String, 
+  groupsize::Int=grouplength[1], separator::Char=underscore)
     sfrac, sexponent =
         if contains(s,"e")
            split(s,"e")
