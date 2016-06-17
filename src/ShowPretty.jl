@@ -40,7 +40,7 @@ function integerString(s::String, groupsize::Int=5)
     else
        s1 = String(s[2:end])
        pretty = nonnegIntegerString(s1, groupsize)
-       String("-", pretty)
+       string("-", pretty)
     end    
 end    
 
