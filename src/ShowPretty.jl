@@ -36,6 +36,39 @@ function stringpretty{T<:Real}(val::T, groupsize::Int=floatGroup(),
     prettyFloat(string(val), groupsize, iseparator, fseparator)
 end
 
+function stringpretty{T<:AbstractFloat}(val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+
+function stringpretty{T<:Real}(val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep())
+    if !prettyfiable(v)
+       throw(ErrorException("type $T is not supported"))
+    end   
+       
+    prettyFloat(string(val), igroupsize, fgroupsize, iseparator, fseparator)
+end
+
+function stringpretty{T<:AbstractFloat}(val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  separator::Char=floatSep()) =
+    prettyFloat(val, igroupsize, fgroupsize, separator, separator)
+function stringpretty{T<:AbstractFloat}(val::T, 
+  groupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    prettyFloat(val, groupsize, groupsize, iseparator, fseparator)
+
+function stringpretty{T<:Real}(val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  separator::Char=floatSep()) =
+    prettyFloat(val, igroupsize, fgroupsize, separator, separator)
+function stringpretty{T<:Real}(val::T, 
+  groupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    prettyFloat(val, groupsize, groupsize, iseparator, fseparator)
+
 # show easy-to-read numbers
 
 function showpretty(io::IO, 
@@ -58,6 +91,40 @@ function showpretty{T<:Real}(io::IO,
     print(io, s)
 end
 
+function showpretty(io::IO, val::AbstractFloat, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(),
+  iseparator::Char=intSep(), fseparator::Char=floatSep())
+    s = prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+    print(io, s)
+end
+
+function showpretty{T<:Real}(io::IO, val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep())
+    s = stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
+    print(io, s)
+end
+
+function showpretty{T<:AbstractFloat}(io::IO, val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  separator::Char=floatSep()) =
+    showpretty(io, val, igroupsize, fgroupsize, separator, separator)
+function showpretty{T<:AbstractFloat}(io::IO, val::T, 
+  groupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    showpretty(io, val, groupsize, groupsize, iseparator, fseparator)
+
+function showpretty{T<:Real}(io::IO, val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  separator::Char=floatSep()) =
+    showpretty(io, val, igroupsize, fgroupsize, separator, separator)
+function showpretty{T<:Real}(io::IO, val::T, 
+  groupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    showpretty(io, val, groupsize, groupsize, iseparator, fseparator)
+
+# show on STDOUT
+
 showpretty(val::Signed, groupsize::Int=intGroup(), separator::Char=intSep()) =
     showpretty(Base.STDOUT, val, groupsize, separator)
 
@@ -69,6 +136,33 @@ showpretty{T<:Real}(val::T, groupsize::Int=floatGroup(),
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
 
+showpretty(val::AbstractFloat, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    showpretty(Base.STDOUT, val, igroupsize, fgroupsize, iseparator, fseparator)
+    
+showpretty{T<:Real}(val::T,
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    showpretty(Base.STDOUT, val, igroupsize, fgroupsize, iseparator, fseparator)
+
+function showpretty{T<:AbstractFloat}(val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  separator::Char=floatSep()) =
+    showpretty(Base.STDOUT, val, igroupsize, fgroupsize, separator, separator)
+function showpretty{T<:AbstractFloat}(val::T, 
+  groupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    showpretty(Base.STDOUT, val, groupsize, groupsize, iseparator, fseparator)
+
+function showpretty{T<:Real}(val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  separator::Char=floatSep()) =
+    showpretty(Base.STDOUT, val, igroupsize, fgroupsize, separator, separator)
+function showpretty{T<:Real}(val::T, 
+  groupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    showpretty(Base.STDOUT, val, groupsize, groupsize, iseparator, fseparator)
 
 # accept integers and floats
 
@@ -87,7 +181,7 @@ prettyFloat(v::AbstractFloat, groupsize::Int, separator::Char) =
 prettyInteger(s::String, groupsize::Int, separator::Char) = 
     integerString(s, groupsize, separator)
 
-function prettyFloat(s::String, groupsize::Int, iseparator::Char, fseparator::Char)
+function prettyFloat(s::String, igroupsize::Int, fgroupsize::Int, iseparator::Char, fseparator::Char)
     sinteger, sfrac =
         if contains(s,".")
            split(s,".")
@@ -95,17 +189,23 @@ function prettyFloat(s::String, groupsize::Int, iseparator::Char, fseparator::Ch
            s, ""
         end
         
-    istr = integerString(sinteger, groupsize, iseparator)
+    istr = integerString(sinteger, igroupsize, iseparator)
     if sfrac == ""
        istr
     else
-       fstr = fractionalString(sfrac, groupsize, fseparator)
+       fstr = fractionalString(sfrac, fgroupsize, fseparator)
        string(istr, ".", fstr)
     end
 end
 
 prettyFloat(s::String, groupsize::Int, separator::Char) = 
-    prettyFloat(s, groupsize, separator, separator)
+    prettyFloat(s, groupsize, groupsize, separator, separator)
+
+prettyFloat(s::String, groupsize::Int, iseparator::Char, fseparator::Char) = 
+    prettyFloat(s, groupsize, groupsize, iseparator, fseparator)
+
+prettyFloat(s::String, igroupsize::Int, fgroupsize::Int, separator::Char) = 
+    prettyFloat(s, igroupsize, fgroupsize, separator, separator)
 
 # do the work
 
