@@ -6,7 +6,7 @@ export stringpretty, showpretty,
        prettyFloatSeparator, prettyFloatSeparator!,
        
 const underscore = '_'
-const grouplength = [5]
+const grouplength = [4]
 const intsep = [underscore]
 const floatsep = [underscore]
 
