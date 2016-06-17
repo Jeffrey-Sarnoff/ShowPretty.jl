@@ -25,7 +25,9 @@ function nonnegIntegerString(s::String, groupsize::Int=5)
    end
    
    if finalgroup > 0
-       pretty[targetidx] = separator
+       if fullgroups > 0 
+           pretty[targetidx] = separator
+       end     
        targetidx -= 1
        pretty[(targetidx-finalgroup+1):targetidx] = sv[(sourceidx-finalgroup+1):sourceidx]
        targetidx -= 1
