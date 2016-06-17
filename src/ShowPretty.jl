@@ -53,6 +53,5 @@ function fractionalString(s::String, groupsize::Int=5)
     end
 end
 
-end
 
 end # module
