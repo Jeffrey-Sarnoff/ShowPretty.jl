@@ -9,7 +9,7 @@ function nonnegIntegerString(s::String, groupsize::Int=5)
    fullgroups, finalgroup = divrem(n, groupsize)
 
    sv = convert(Vector{Char},s)
-   p = repeat(" ", n+(fullgroups-1)+(finalgroup!=0)+length(numsign))
+   p = repeat(" ", n+(fullgroups-1)+(finalgroup!=0))
    pretty = convert(Vector{Char},p)
    
    sourceidx = n
