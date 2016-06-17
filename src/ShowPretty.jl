@@ -2,17 +2,21 @@ module ShowPretty
 
 export stringpretty, showpretty, 
        prettyGroupLength, prettyGroupLength!,
-       prettyIntSeparator, prettyIntSeparator!,
-       prettyFloatSeparator, prettyFloatSeparator!,
+       prettyGroupSeparator, prettyGroupSeparator!,
+       prettyIntGroupLength, prettyIntGroupLength!,
+       prettyFloatGroupLength, prettyFloatGroupLength!,
+       prettyIntGroupSeparator, prettyIntGroupSeparator!,
+       prettyFloatGroupSeparator, prettyFloatGroupSeparator!,
        
-const underscore = '_'
-const grouplength = [4]
-const intsep = [underscore]
-const floatsep = [underscore]
+const groupSeparator  = '_'
+const groupLength     = 4
 
-groupLength=()->grouplength[1]
-intSep=()->intsep[1]
-floatSep=()->floatsep[1]
+const intgroup   = [groupLength]    ; intGroup=()->intgroup[1]
+const floatgroup = [groupLength]    ; floatGroup=()->floatgroup[1]
+const intsep     = [groupSeparator] ; intSep=()->intsep[1]
+const floatsep   = [groupSeparator] ; floatSep=()->floatsep[1]
+
+#  make numeric strings easier to read
 
 stringpretty{T<:Signed}(val::T, 
   groupsize::Int=groupLength(), separator::Char=intSep()) =
@@ -23,14 +27,6 @@ stringpretty{T<:AbstractFloat}(
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     prettyFloat(val, groupsize, iseparator, fseparator)
 
-function prettyfiable{T<:Real}(val::T)
-    try
-        convert(BigFloat,v); true
-    catch
-        false
-    end        
-end
-
 function stringpretty{T<:Real}(val::T, groupsize::Int=groupLength(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep())
     if !prettyfiable(v)
@@ -40,6 +36,7 @@ function stringpretty{T<:Real}(val::T, groupsize::Int=groupLength(),
     prettyFloat(string(val), groupsize, iseparator, fseparator)
 end
 
+# show easy-to-read numbers
 
 function showpretty(io::IO, 
   val::Signed, groupsize::Int=groupLength(), separator::Char=intSep())
@@ -189,25 +186,61 @@ end
 
 # get and set shared parameters
 
-prettyGroupLength() = grouplength[1]
+prettyGroupLength() = (intGroup() == floatGroup()) ? intGroup() : (intGroup(), floatGroup())
 function prettyGroupLength!(n::Int)
-    grouplength[1] = max(0,n)
+    n = max(0,n)
+    prettyIntGroupLength!(n)
+    prettyFloatGroupLength!(n)
     nothing
 end
 prettyGroupLength(n::Int) = prettyGroupLength!(n)
 
-prettyIntSeparator() = intsep[1]
-function prettyIntSeparator!(ch::Char)
+prettyIntGroupLength() = intGroup()
+function prettyIntGroupLength!(n::Int)
+    n = max(0,n)
+    intgroup[1]   = n
+    nothing
+end
+prettyIntGroupLength(n::Int) = prettyIntGroupLength!(n)
+
+prettyFloatGroupLength() = floatGroup()
+function prettyFloatGroupLength!(n::Int)
+    n = max(0,n)
+    floatgroup[1]   = n
+    nothing
+end
+prettyFloatGroupLength(n::Int) = prettyFloatGroupLength!(n)
+
+
+prettyGroupSeparator() = (intSep() == floatSep()) ? intSep() : (intSep(), floatSep())
+function prettyGroupSeparator!(ch::Char)
+    prettyFloatGroupSeparator!(ch)
+    prettyIntGroupSeparator!(ch)
+    nothing
+end
+prettyGroupSeparator(ch::Int) = prettyGroupSeparator!(ch)
+
+prettyIntGroupSeparator() = intSep()
+function prettyIntGroupSeparator!(ch::Char)
     intsep[1] = ch
     nothing
 end
-prettyIntSeparator(ch::Char) = prettyIntSeparator!(ch)
+prettyIntGroupSeparator(ch::Char) = prettyIntGroupSeparator!(ch)
 
-prettyFloatSeparator() = floatsep[1]
-function prettyFloatSeparator!(ch::Char)
+prettyFloatGroupSeparator() = floatSep()
+function prettyFloatGroupSeparator!(ch::Char)
     floatsep[1] = ch
     nothing
 end
-prettyFloatSeparator(ch::Char) = prettyFloatSeparator!(ch)
+prettyFloatGroupSeparator(ch::Char) = prettyFloatGroupSeparator!(ch)
+
+# test: is this a type that can be handled above
+function prettyfiable{T<:Real}(val::T)
+    try
+        convert(BigFloat,v); true
+    catch
+        false
+    end        
+end
 
 end # module
