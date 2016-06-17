@@ -102,7 +102,7 @@ prettyFloat(s::String, groupsize::Int, separator::Char) =
 
 # do the work
 
-function nonnegIntegerString(s::String, groupsize::Int, separator::Cha)
+function nonnegIntegerString(s::String, groupsize::Int, separator::Char)
     n = length(s)
     n==0 && return "0"
 
@@ -150,7 +150,7 @@ function nonnegIntegerString(s::String, groupsize::Int, separator::Cha)
     end
 end
 
-function integerString(s::String, groupsize::Int separator::Char=underscore)
+function integerString(s::String, groupsize::Int, separator::Char)
     if s[1] != "-"
        nonnegIntegerString(s, groupsize, separator)
     else
