@@ -15,28 +15,29 @@ prettyGroupLength(n::Int) = prettyGroupLength!(n)
 aschar(x::Char) = x
 aschar(x::String) = x!="" ? x[1] : throw(DomainError)
 
-function nonnegIntegerString(s::String, groupsize::Int=grouplength[1], separator::Char=underscore)
-   n = length(s)
-   n==0 && return "0"
+function nonnegIntegerString(s::String, 
+  groupsize::Int=grouplength[1], separator::Char=underscore)
+    n = length(s)
+    n==0 && return "0"
 
-   sinteger, sexponent =
+    sinteger, sexponent =
         if contains(s,"e")
            split(s,"e")
         else
            s, ""
         end
     
-   n = length(sinteger)
+    n = length(sinteger)
 
-   fullgroups, finalgroup = divrem(n, groupsize)
+    fullgroups, finalgroup = divrem(n, groupsize)
 
-   sv = convert(Vector{Char},sinteger)
-   p = repeat(" ", n+(fullgroups-1)+(finalgroup!=0))
-   pretty = convert(Vector{Char},p)
+    sv = convert(Vector{Char},sinteger)
+    p = repeat(" ", n+(fullgroups-1)+(finalgroup!=0))
+    pretty = convert(Vector{Char},p)
    
-   sourceidx = n
-   targetidx = length(pretty)
-   for k in fullgroups:-1:1
+    sourceidx = n
+    targetidx = length(pretty)
+    for k in fullgroups:-1:1
         pretty[(targetidx-groupsize+1):targetidx] = sv[(sourceidx-groupsize+1):sourceidx]
         sourceidx -= groupsize
         targetidx -= groupsize
@@ -44,17 +45,17 @@ function nonnegIntegerString(s::String, groupsize::Int=grouplength[1], separator
             pretty[targetidx] = separator
             targetidx -= 1
         end
-   end
+    end
    
-   if finalgroup > 0
+    if finalgroup > 0
         if fullgroups > 0 
             pretty[targetidx] = separator
             targetidx -= 1
         end     
         pretty[(targetidx-finalgroup+1):targetidx] = sv[(sourceidx-finalgroup+1):sourceidx]
-   end
+    end
 
-   prettystring = convert(String, pretty)
+    prettystring = convert(String, pretty)
 
     if length(sexponent) != 0
        string(prettystring,"e",sexponent)
