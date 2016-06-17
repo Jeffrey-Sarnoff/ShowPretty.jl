@@ -65,17 +65,19 @@ showpretty{T<:Real}(val::T, groupsize::Int=groupLength(),
     showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
 
 
-# handle integers and floats
+# accept integers and floats
 
 prettyInteger(v::Signed, groupsize::Int, separator::Char) = 
-    integerString(String(v), groupsize, separator, separator)
-
-prettyFloat(v::AbstractFloat, groupsize::Int, separator::Char) = 
-    prettyFloat(String(v), groupsize, separator, separator)
+    integerString(String(v), groupsize, separator)
 
 prettyFloat(v::AbstractFloat, 
   groupsize::Int, iseparator::Char, fseparator::Char) = 
     prettyFloat(String(v), groupsize, iseparator, fseparator)
+
+prettyFloat(v::AbstractFloat, groupsize::Int, separator::Char) = 
+    prettyFloat(String(v), groupsize, separator, separator)
+
+# handle integer and float strings
 
 prettyInteger(s::String, groupsize::Int, separator::Char) = 
     integerString(s, groupsize, separator)
