@@ -125,29 +125,28 @@ prettyInteger(v::Signed, groupsize::Int=grouplength[1], separator::Char=undersco
 stringpretty{T<:Signed}(val::T, groupsize::Int=grouplength[1], separator::Char=underscore) =
     prettyInteger(val, groupsize, separator)
 
-stringpretty{T<:AbstractFloat}(val::T, groupsize::Int=grouplength[1], iseparator::Char=underscore, fseparator::Char=underscore) =
-    prettyFloat(val, groupsize, iseparator, fseparator)
+stringpretty{T<:AbstractFloat}(
+    val::T, groupsize::Int=grouplength[1], 
+    iseparator::Char=underscore, fseparator::Char=underscore) =
+        prettyFloat(val, groupsize, iseparator, fseparator)
 
-function showpretty(io::IO, val::Signed, groupsize::Int=grouplength[1], 
-                            iseparator::Char=underscore, fseparator::Char=underscore)
-    s = prettyInteger(val, groupsize, iseparator, fseparator)
-    print(io, s)
+function showpretty(io::IO, 
+    val::Signed, groupsize::Int=grouplength[1], 
+    iseparator::Char=underscore, fseparator::Char=underscore)
+        s = prettyInteger(val, groupsize, iseparator, fseparator)
+        print(io, s)
 end
 
-function showpretty(io::IO, val::AbstractFloat, groupsize::Int=grouplength[1], 
-                            iseparator::Char=underscore, fseparator::Char=underscore)
-    s = prettyFloat(val, groupsize, iseparator, fseparator)
-    print(io, s)
+function showpretty(io::IO, 
+    val::AbstractFloat, groupsize::Int=grouplength[1], 
+    iseparator::Char=underscore, fseparator::Char=underscore)
+        s = prettyFloat(val, groupsize, iseparator, fseparator)
+        print(io, s)
 end
 
 showpretty{T<:Union{Signed,AbstractFloat}(val::T, groupsize::Int=grouplength[1], 
-                                          iseparator::Char=underscore, fseparator::Char=underscore) =
-    showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
+    iseparator::Char=underscore, fseparator::Char=underscore) =
+        showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
     
-                                                   
-
-    
-    
-
 
 end # module
