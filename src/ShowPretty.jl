@@ -90,7 +90,8 @@ function fractionalString(s::String, groupsize::Int=grouplength[1], separator::C
     end
 end
 
-function prettyFloat(s::String, groupsize::Int=5, iseparator::Char=underscore, fseparator::Char=underscore)
+function prettyFloat(s::String, 
+  groupsize::Int=5, iseparator::Char=underscore, fseparator::Char=underscore)
     sinteger, sfrac =
         if contains(s,".")
            split(s,".")
@@ -116,7 +117,8 @@ prettyInteger(s::String, groupsize::Int=grouplength[1], separator::Char=undersco
 prettyFloat(v::AbstractFloat, groupsize::Int=grouplength[1], separator::Char=underscore) = 
     prettyFloat(String(v), groupsize, separator, separator)
 
-prettyFloat(v::AbstractFloat, groupsize::Int=grouplength[1], iseparator::Char=underscore, fseparator::Char=underscore) = 
+prettyFloat(v::AbstractFloat, 
+  groupsize::Int=grouplength[1], iseparator::Char=underscore, fseparator::Char=underscore) = 
     prettyFloat(String(v), groupsize, iseparator, fseparator)
 
 prettyInteger(v::Signed, groupsize::Int=grouplength[1], separator::Char=underscore) = 
@@ -126,27 +128,27 @@ stringpretty{T<:Signed}(val::T, groupsize::Int=grouplength[1], separator::Char=u
     prettyInteger(val, groupsize, separator)
 
 stringpretty{T<:AbstractFloat}(
-    val::T, groupsize::Int=grouplength[1], 
-    iseparator::Char=underscore, fseparator::Char=underscore) =
-        prettyFloat(val, groupsize, iseparator, fseparator)
+  val::T, groupsize::Int=grouplength[1], 
+  iseparator::Char=underscore, fseparator::Char=underscore) =
+    prettyFloat(val, groupsize, iseparator, fseparator)
 
 function showpretty(io::IO, 
-    val::Signed, groupsize::Int=grouplength[1], 
-    iseparator::Char=underscore, fseparator::Char=underscore)
-        s = prettyInteger(val, groupsize, iseparator, fseparator)
-        print(io, s)
+  val::Signed, groupsize::Int=grouplength[1], 
+  iseparator::Char=underscore, fseparator::Char=underscore)
+    s = prettyInteger(val, groupsize, iseparator, fseparator)
+    print(io, s)
 end
 
 function showpretty(io::IO, 
-    val::AbstractFloat, groupsize::Int=grouplength[1], 
-    iseparator::Char=underscore, fseparator::Char=underscore)
-        s = prettyFloat(val, groupsize, iseparator, fseparator)
-        print(io, s)
+  val::AbstractFloat, groupsize::Int=grouplength[1], 
+  iseparator::Char=underscore, fseparator::Char=underscore)
+    s = prettyFloat(val, groupsize, iseparator, fseparator)
+    print(io, s)
 end
 
 showpretty{T<:Union{Signed,AbstractFloat}(val::T, groupsize::Int=grouplength[1], 
-    iseparator::Char=underscore, fseparator::Char=underscore) =
-        showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
+  iseparator::Char=underscore, fseparator::Char=underscore) =
+    showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
     
 
 end # module
