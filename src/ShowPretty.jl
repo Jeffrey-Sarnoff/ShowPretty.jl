@@ -49,7 +49,7 @@ end
 
 function fractionalString(s::String, groupsize::Int=5)
     sfrac, sexponent =
-        if "e" in s
+        if contains(s,"e")
            split(s,"e")
         else
            s, ""
