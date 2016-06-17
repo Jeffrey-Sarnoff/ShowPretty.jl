@@ -23,9 +23,17 @@ stringpretty{T<:AbstractFloat}(
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     prettyFloat(val, groupsize, iseparator, fseparator)
 
+function prettyfiable{T<:Real}(val::T)
+    try
+        convert(BigFloat,v); true
+    catch
+        false
+    end        
+end
+
 function stringpretty{T<:Real}(val::T, groupsize::Int=groupLength(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep())
-    if !(try begin convert(BigFloat,v); true end; catch return false; end)
+    if !prettyfiable(v)
        throw(ErrorException("type $T is not supported"))
     end   
        
