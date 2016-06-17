@@ -6,7 +6,7 @@ const separator = '_'
 
 function integerString(s::String, groupsize::Int=5)
    numsign = (s[1] == "-") ? "-" : ""
-   if (s[1]=="-") s=s[2:end] end
+   if (s[1]=="-") s=String(s[2:end]) end
    n = length(s)
    fullgroups, finalgroup = divrem(n, groupsize)
    p = repeat(" ", n+(fullgroups-1)+(finalgroup!=0)+length(numsign))
