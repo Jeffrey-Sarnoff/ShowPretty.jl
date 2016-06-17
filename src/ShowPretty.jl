@@ -20,7 +20,7 @@ stringpretty{T<:Signed}(val::T,
 
 stringpretty{T<:AbstractFloat}(
   val::T, groupsize::Int=groupLength(), 
-  iseparator::Char=underscore, fseparator::Char=intSep()) =
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     prettyFloat(val, groupsize, iseparator, fseparator)
 
 function stringpretty{T<:Real}(val::T, groupsize::Int=groupLength(), 
