@@ -1,2 +1,2 @@
 ## ShowPretty.jl
-#### easily read presentation of numbers with many digits
+###### easily read numbers with many digits
