@@ -90,7 +90,7 @@ function realpretty(s::String, groupsize::Int=5)
     if sfrac == ""
        integerString(sinteger, groupsize)
     else
-       join( (integerString(sinteger, groupsize), fractionString(sfrac, groupsize)), "." )
+       join( (integerString(sinteger, groupsize), fractionalString(sfrac, groupsize)), "." )
     end
 end
 
