@@ -35,9 +35,13 @@ function nonnegIntegerString(s::String, groupsize::Int=5)
 end
 
 function integerString(s::String, groupsize::Int=5)
-    numsign = s[1]=="-" ? "-" : ""
-    pretty = nonnegIntegerString(s[(1+length(numsign)):end], groupsize)
-    String(numsign, pretty)
+    if s[1] != "-"
+       nonnegIntegerString(s, groupsize)
+    else
+       s1 = String(s[2:end]
+       pretty = nonnegIntegerString(s1, groupsize)
+       String("-", pretty)
+    end    
 end    
 
 function fractionalString(s::String, groupsize::Int=5)
