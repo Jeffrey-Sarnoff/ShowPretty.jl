@@ -4,14 +4,12 @@ export showpretty
 
 const separator = '_'
 
-function integerString(s::String, groupsize::Int=5)
-   numsign = (s[1] == "-") ? "-" : ""
-   if (s[1]=="-") s=String(s[2:end]) end
+function nonnegIntegerString(s::String, groupsize::Int=5)
    n = length(s)
    fullgroups, finalgroup = divrem(n, groupsize)
-   p = repeat(" ", n+(fullgroups-1)+(finalgroup!=0)+length(numsign))
-   
+
    sv = convert(Vector{Char},s)
+   p = repeat(" ", n+(fullgroups-1)+(finalgroup!=0)+length(numsign))
    pretty = convert(Vector{Char},p)
    
    sourceidx = n
@@ -32,13 +30,15 @@ function integerString(s::String, groupsize::Int=5)
        pretty[(targetidx-finalgroup+1):targetidx] = sv[(sourceidx-finalgroup+1):sourceidx]
        targetidx -= 1
    end
-   if numsign == "-"
-       @assert targetidx == 1
-       pretty[targetidx] = "-"
-   end
-   
+
    convert(String, pretty)
 end
+
+function integerString(s::String, groupsize::Int=5)
+    numsign = s[1]=="-" ? "-" : ""
+    pretty = nonnegIntegerString(s[(1+length(numsign)):end], groupsize)
+    String(numsign, pretty)
+end    
 
 function fractionalString(s::String, groupsize::Int=5)
     sfrac, sexponent =
