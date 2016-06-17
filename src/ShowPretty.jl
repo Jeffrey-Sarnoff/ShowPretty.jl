@@ -1,10 +1,21 @@
 module ShowPretty
 
-export showpretty
+export stringpretty, showpretty, prettyGroupLength, prettyGroupLength!
 
-const separator = '_'
+const underscore = '_'
+const grouplength = [5]
 
-function nonnegIntegerString(s::String, groupsize::Int=5)
+prettyGroupLength() = grouplength[1]
+function prettyGroupLength!(n::Int)
+    grouplength[1] = max(0,n)
+    nothing
+end
+prettyGroupLength(n::Int) = prettyGroupLength!(n)
+
+aschar(x::Char) = x
+aschar(x::String) = x!="" ? x[1] : throw(DomainError)
+
+function nonnegIntegerString(s::String, groupsize::Int=grouplength[1], separator::Char=underscore)
    n = length(s)
    n==0 && return "0"
 
@@ -52,17 +63,17 @@ function nonnegIntegerString(s::String, groupsize::Int=5)
     end
 end
 
-function integerString(s::String, groupsize::Int=5)
+function integerString(s::String, groupsize::Int=grouplength[1], separator::Char=underscore)
     if s[1] != "-"
-       nonnegIntegerString(s, groupsize)
+       nonnegIntegerString(s, groupsize, separator)
     else
        s1 = string(s[2:end])
-       pretty = nonnegIntegerString(s1, groupsize)
+       pretty = nonnegIntegerString(s1, groupsize, separator)
        string("-", pretty)
     end    
 end    
 
-function fractionalString(s::String, groupsize::Int=5)
+function fractionalString(s::String, groupsize::Int=grouplength[1], separator::Char=underscore)
     sfrac, sexponent =
         if contains(s,"e")
            split(s,"e")
@@ -70,7 +81,7 @@ function fractionalString(s::String, groupsize::Int=5)
            s, ""
         end
     
-    pretty = reverse(nonnegIntegerString(reverse(sfrac), groupsize))
+    pretty = reverse(nonnegIntegerString(reverse(sfrac), groupsize, separator))
     
     if length(sexponent) != 0
        string(pretty,"e",sexponent)
@@ -79,7 +90,7 @@ function fractionalString(s::String, groupsize::Int=5)
     end
 end
 
-function realpretty(s::String, groupsize::Int=5)
+function prettyFloat(s::String, groupsize::Int=5, iseparator::Char=underscore, fseparator::Char=underscore)
     sinteger, sfrac =
         if contains(s,".")
            split(s,".")
@@ -87,12 +98,56 @@ function realpretty(s::String, groupsize::Int=5)
            s, ""
         end
         
+    istr = integerString(sinteger, groupsize, iseparator)
     if sfrac == ""
-       integerString(sinteger, groupsize)
+       istr
     else
-       join( (integerString(sinteger, groupsize), fractionalString(sfrac, groupsize)), "." )
+       fstr = fractionalString(sfrac, groupsize, fseparator)
+       string(istr, ".", fstr)
     end
 end
+
+prettyFloat(s::String, groupsize::Int=grouplength[1], separator::Char=underscore) = 
+    prettyFloat(s, groupsize, separator, separator)
+
+prettyInteger(s::String, groupsize::Int=grouplength[1], separator::Char=underscore) = 
+    integerString(s, groupsize, separator, separator)
+
+prettyFloat(v::AbstractFloat, groupsize::Int=grouplength[1], separator::Char=underscore) = 
+    prettyFloat(String(v), groupsize, separator, separator)
+
+prettyFloat(v::AbstractFloat, groupsize::Int=grouplength[1], iseparator::Char=underscore, fseparator::Char=underscore) = 
+    prettyFloat(String(v), groupsize, iseparator, fseparator)
+
+prettyInteger(v::Signed, groupsize::Int=grouplength[1], separator::Char=underscore) = 
+    integerString(String(s), groupsize, separator, separator)
+
+stringpretty{T<:Signed}(val::T, groupsize::Int=grouplength[1], separator::Char=underscore) =
+    prettyInteger(val, groupsize, separator)
+
+stringpretty{T<:AbstractFloat}(val::T, groupsize::Int=grouplength[1], iseparator::Char=underscore, fseparator::Char=underscore) =
+    prettyFloat(val, groupsize, iseparator, fseparator)
+
+function showpretty(io::IO, val::Signed, groupsize::Int=grouplength[1], 
+                            iseparator::Char=underscore, fseparator::Char=underscore)
+    s = prettyInteger(val, groupsize, iseparator, fseparator)
+    print(io, s)
+end
+
+function showpretty(io::IO, val::AbstractFloat, groupsize::Int=grouplength[1], 
+                            iseparator::Char=underscore, fseparator::Char=underscore)
+    s = prettyFloat(val, groupsize, iseparator, fseparator)
+    print(io, s)
+end
+
+showpretty{T<:Union{Signed,AbstractFloat}(val::T, groupsize::Int=grouplength[1], 
+                                          iseparator::Char=underscore, fseparator::Char=underscore) =
+    showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
+    
+                                                   
+
+    
+    
 
 
 end # module
