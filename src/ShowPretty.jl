@@ -11,7 +11,8 @@ const intsep = [underscore]
 const floatsep = [underscore]
 
 
-stringpretty{T<:Signed}(val::T, groupsize::Int=grouplength[1], separator::Char=underscore) =
+stringpretty{T<:Signed}(val::T, 
+  groupsize::Int=grouplength[1], separator::Char=underscore) =
     prettyInteger(val, groupsize, separator)
 
 stringpretty{T<:AbstractFloat}(
@@ -66,7 +67,8 @@ showpretty{T<:Real}(val::T, groupsize::Int=grouplength[1],
 prettyInteger(v::Signed, groupsize::Int=grouplength[1], separator::Char=underscore) = 
     integerString(String(s), groupsize, separator, separator)
 
-prettyFloat(v::AbstractFloat, groupsize::Int=grouplength[1], separator::Char=underscore) = 
+prettyFloat(v::AbstractFloat, 
+  groupsize::Int=grouplength[1], separator::Char=underscore) = 
     prettyFloat(String(v), groupsize, separator, separator)
 
 prettyFloat(v::AbstractFloat, 
