@@ -6,6 +6,8 @@ const separator = '_'
 
 function nonnegIntegerString(s::String, groupsize::Int=5)
    n = length(s)
+   n==0 && return "0"
+   
    fullgroups, finalgroup = divrem(n, groupsize)
 
    sv = convert(Vector{Char},s)
