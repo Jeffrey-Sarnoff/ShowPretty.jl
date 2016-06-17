@@ -58,7 +58,7 @@ function fractionalString(s::String, groupsize::Int=5)
     pretty = reverse(nonnegIntegerString(reverse(sfrac), groupsize))
     
     if sexponent != ""
-       join(pretty,sexponent,"e")
+       join((pretty,sexponent),"e")
     else
        pretty
     end
