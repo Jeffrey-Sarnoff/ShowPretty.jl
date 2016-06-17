@@ -38,7 +38,7 @@ function integerString(s::String, groupsize::Int=5)
     if s[1] != "-"
        nonnegIntegerString(s, groupsize)
     else
-       s1 = String(s[2:end]
+       s1 = String(s[2:end])
        pretty = nonnegIntegerString(s1, groupsize)
        String("-", pretty)
     end    
