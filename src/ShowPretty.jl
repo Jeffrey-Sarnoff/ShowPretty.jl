@@ -10,18 +10,21 @@ const grouplength = [5]
 const intsep = [underscore]
 const floatsep = [underscore]
 
+groupLength=()->grouplength[1]
+intSep=()->intsep[1]
+floatSep=()->floatsep[1]
 
 stringpretty{T<:Signed}(val::T, 
-  groupsize::Int=grouplength[1], separator::Char=underscore) =
+  groupsize::Int=groupLength(), separator::Char=intSep()) =
     prettyInteger(val, groupsize, separator)
 
 stringpretty{T<:AbstractFloat}(
-  val::T, groupsize::Int=grouplength[1], 
-  iseparator::Char=underscore, fseparator::Char=underscore) =
+  val::T, groupsize::Int=groupLength(), 
+  iseparator::Char=underscore, fseparator::Char=intSep()) =
     prettyFloat(val, groupsize, iseparator, fseparator)
 
-function stringpretty{T<:Real}(val::T, groupsize::Int=grouplength[1], 
-  iseparator::Char=underscore, fseparator::Char=underscore)
+function stringpretty{T<:Real}(val::T, groupsize::Int=groupLength(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep())
     if !(try begin convert(BigFloat,v); true end; catch return false; end)
        throw(ErrorException("type $T is not supported"))
     end   
@@ -31,56 +34,53 @@ end
 
 
 function showpretty(io::IO, 
-  val::Signed, groupsize::Int=grouplength[1], separator::Char=underscore)
+  val::Signed, groupsize::Int=groupLength(), separator::Char=intSep())
     s = prettyInteger(val, groupsize, separator)
     print(io, s)
 end
 
 function showpretty(io::IO, 
-  val::AbstractFloat, groupsize::Int=grouplength[1], 
-  iseparator::Char=underscore, fseparator::Char=underscore)
+  val::AbstractFloat, groupsize::Int=groupLength(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep())
     s = prettyFloat(val, groupsize, iseparator, fseparator)
     print(io, s)
 end
 
 function showpretty{T<:Real}(io::IO, 
-  val::T, groupsize::Int=grouplength[1], 
-  iseparator::Char=underscore, fseparator::Char=underscore)
+  val::T, groupsize::Int=groupLength(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep())
     s = stringpretty(val, groupsize, iseparator, fseparator)
     print(io, s)
 end
 
-showpretty(val::Signed, groupsize::Int=grouplength[1], separator::Char=underscore) =
+showpretty(val::Signed, groupsize::Int=groupLength(), separator::Char=intSep()) =
     showpretty(Base.STDOUT, val, groupsize, separator)
 
-showpretty(val::AbstractFloat, groupsize::Int=grouplength[1], 
-  iseparator::Char=underscore, fseparator::Char=underscore) =
+showpretty(val::AbstractFloat, groupsize::Int=groupLength(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
     
-showpretty{T<:Real}(val::T, groupsize::Int=grouplength[1], 
-  iseparator::Char=underscore, fseparator::Char=underscore) =
+showpretty{T<:Real}(val::T, groupsize::Int=groupLength(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
 
 
 # handle integers and floats
 
-prettyInteger(v::Signed, groupsize::Int=grouplength[1], separator::Char=underscore) = 
+prettyInteger(v::Signed, groupsize::Int, separator::Char) = 
     integerString(String(s), groupsize, separator, separator)
 
-prettyFloat(v::AbstractFloat, 
-  groupsize::Int=grouplength[1], separator::Char=underscore) = 
+prettyFloat(v::AbstractFloat, groupsize::Int, separator::Char) = 
     prettyFloat(String(v), groupsize, separator, separator)
 
 prettyFloat(v::AbstractFloat, 
-  groupsize::Int=grouplength[1], 
-  iseparator::Char=underscore, fseparator::Char=underscore) = 
+  groupsize::Int, iseparator::Char, fseparator::Char) = 
     prettyFloat(String(v), groupsize, iseparator, fseparator)
 
-prettyInteger(s::String, groupsize::Int=grouplength[1], separator::Char=underscore) = 
+prettyInteger(s::String, groupsize::Int, separator::Char) = 
     integerString(s, groupsize, separator)
 
-function prettyFloat(s::String, 
-  groupsize::Int=5, iseparator::Char=underscore, fseparator::Char=underscore)
+function prettyFloat(s::String, groupsize::Int, iseparator::Char, fseparator::Char)
     sinteger, sfrac =
         if contains(s,".")
            split(s,".")
@@ -97,13 +97,12 @@ function prettyFloat(s::String,
     end
 end
 
-prettyFloat(s::String, groupsize::Int=grouplength[1], separator::Char=underscore) = 
+prettyFloat(s::String, groupsize::Int, separator::Char) = 
     prettyFloat(s, groupsize, separator, separator)
 
 # do the work
 
-function nonnegIntegerString(s::String, 
-  groupsize::Int=grouplength[1], separator::Char=underscore)
+function nonnegIntegerString(s::String, groupsize::Int, separator::Cha)
     n = length(s)
     n==0 && return "0"
 
@@ -151,8 +150,7 @@ function nonnegIntegerString(s::String,
     end
 end
 
-function integerString(s::String, 
-  groupsize::Int=grouplength[1], separator::Char=underscore)
+function integerString(s::String, groupsize::Int separator::Char=underscore)
     if s[1] != "-"
        nonnegIntegerString(s, groupsize, separator)
     else
@@ -162,8 +160,7 @@ function integerString(s::String,
     end    
 end    
 
-function fractionalString(s::String, 
-  groupsize::Int=grouplength[1], separator::Char=underscore)
+function fractionalString(s::String, groupsize::Int, separator::Char)
     sfrac, sexponent =
         if contains(s,"e")
            split(s,"e")
