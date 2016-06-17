@@ -45,8 +45,8 @@ function nonnegIntegerString(s::String, groupsize::Int=5)
 
    prettystring = convert(String, pretty)
 
-    if sexponent != ""
-       join((prettystring,sexponent),"e")
+    if length(sexponent) != 0
+       string(prettystring,"e",sexponent)
     else
        prettystring
     end
@@ -72,8 +72,8 @@ function fractionalString(s::String, groupsize::Int=5)
     
     pretty = reverse(nonnegIntegerString(reverse(sfrac), groupsize))
     
-    if sexponent != ""
-       join((pretty,sexponent),"e")
+    if length(sexponent) != 0
+       string(pretty,"e",sexponent)
     else
        pretty
     end
