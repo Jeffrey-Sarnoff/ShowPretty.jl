@@ -72,7 +72,8 @@ prettyFloat(v::AbstractFloat,
     prettyFloat(String(v), groupsize, separator, separator)
 
 prettyFloat(v::AbstractFloat, 
-  groupsize::Int=grouplength[1], iseparator::Char=underscore, fseparator::Char=underscore) = 
+  groupsize::Int=grouplength[1], 
+  iseparator::Char=underscore, fseparator::Char=underscore) = 
     prettyFloat(String(v), groupsize, iseparator, fseparator)
 
 prettyInteger(s::String, groupsize::Int=grouplength[1], separator::Char=underscore) = 
