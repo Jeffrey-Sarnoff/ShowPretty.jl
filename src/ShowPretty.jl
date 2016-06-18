@@ -115,7 +115,7 @@ end
 
 showpretty(io::IO, val::AbstractFloat,
         igroupsize::Int, fgroupsize::Int, iseparator::Char, fseparator::Char) =
-    show(io, stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
+    show(io, stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator))
 showpretty(io::IO, val::AbstractFloat,
         igroupsize::Int, fgroupsize::Int, separator::Char=floatSep()) =
     show(io, stringpretty(val, igroupsize, fgroupsize, separator, separator))
@@ -192,7 +192,7 @@ end
 
 showpretty(val::AbstractFloat,
         igroupsize::Int, fgroupsize::Int, iseparator::Char, fseparator::Char) =
-    show(Base.STDOUT, stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
+    show(Base.STDOUT, stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator))
 showpretty(val::AbstractFloat,
         igroupsize::Int, fgroupsize::Int, separator::Char=floatSep()) =
     show(Base.STDOUT, stringpretty(val, igroupsize, fgroupsize, separator, separator))
