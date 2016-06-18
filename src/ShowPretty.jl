@@ -120,7 +120,7 @@ showpretty{T<:Signed}(io::IO, val::Rational{T},  separator::Char=intSep(), group
 function showpretty(io::IO, val::AbstractFloat, 
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(),
   iseparator::Char=intSep(), fseparator::Char=floatSep())
-    s = prettystring(val, igroupsize, fgroupsize, iseparator, fseparator)
+    s = stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
     print(io, s)
 end
 showpretty(io::IO, val::AbstractFloat, 
