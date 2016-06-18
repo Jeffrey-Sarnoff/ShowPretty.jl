@@ -18,6 +18,7 @@ const floatsep   = [groupSeparator] ; floatSep=()->floatsep[1]
 
 #  make numeric strings easier to read
 
+
 stringpretty{T<:Signed}(val::T, 
   groupsize::Int=intGroup(), separator::Char=intSep()) =
     prettyInteger(val, groupsize, separator)
@@ -34,6 +35,7 @@ stringpretty{T<:AbstractFloat}(val::T,
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
   separator::Char=floatSep()) =
     prettyFloat(val, igroupsize, fgroupsize, separator, separator)
+=#
 
 stringpretty{T<:AbstractFloat}(val::T, 
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
