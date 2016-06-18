@@ -17,7 +17,7 @@ To Install: `julia> Pkg.clone("https://github.com/Jeffrey-Sarnoff/ShowPretty.jl"
 -1,234,567
 
 > stringpretty(12345.987654321)             # "12,345.98765_4321"
-> stringpretty(12345.987654,',',3)          # "12,345.987.654,3
+> stringpretty(12345.987654,',',3)          # "12,345.987.654,3"
 > stringpretty(0.9876,4,'_')                # "0.9876"
 
 > intSpacer(','); intSizer(3); showpretty(12345678.87654321)
