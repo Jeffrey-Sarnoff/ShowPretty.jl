@@ -19,46 +19,51 @@ const floatsep   = [groupSeparator] ; floatSep=()->floatsep[1]
 #  make numeric strings easier to read
 
 
-stringpretty{T<:Signed}(val::T, groupsize::Int=intGroup(), separator::Char=intSep()) =
+stringpretty(val::Signed, groupsize::Int=intGroup(), separator::Char=intSep()) =
     prettyInteger(val, groupsize, separator)
 # allow other variable ordering
-stringpretty{T<:Signed}(val::T, separator::Char=intSep(), groupsize::Int=intGroup()) =
+stringpretty(val::Signed, separator::Char=intSep(), groupsize::Int=intGroup()) =
     stringpretty(val, groupsize, separator)
 
-stringpretty{T<:AbstractFloat}(val::T, 
+stringpretty{T<:Signed}(val::Rational{T}, groupsize::Int=intGroup(), separator::Char=intSep()) =
+    string(prettyInteger(val.num, groupsize, separator),"//",prettyInteger(val.den, groupsize, separator))
+# allow other variable ordering
+stringpretty{T<:Signed}(val::Rational{T}, separator::Char=intSep(), groupsize::Int=intGroup()) =
+    stringpretty(val, groupsize, separator)
+
+
+stringpretty(val::AbstractFloat,
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
 # allow other variable orderings
-stringpretty{T<:AbstractFloat}(val::T, 
+stringpretty(val::AbstractFloat,
   iseparator::Char=intSep(), fseparator::Char=floatSep(),
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) =
     stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
-stringpretty{T<:AbstractFloat}(val::T, 
+stringpretty(val::AbstractFloat,
   igroupsize::Int=intGroup(), iseparator::Char=intSep(),
   fgroupsize::Int=floatGroup(), fseparator::Char=floatSep()) =
     stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
-stringpretty{T<:AbstractFloat}(val::T, 
+stringpretty(val::AbstractFloat,
   iseparator::Char=intSep(), igroupsize::Int=intGroup(),
   fseparator::Char=floatSep(), fgroupsize::Int=floatGroup()) =
     stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
+stringpretty(val::AbstractFloat,
+  separator::Char=floatSep(), igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) =
+    stringpretty(val, igroupsize, fgroupsize, separator, separator)
+stringpretty(val::AbstractFloat,
+  groupsize::Int=floatGroup(), iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    stringpretty(val, groupsize, groupsize, iseparator, fseparator)
+stringpretty(val::AbstractFloat,
+  separator::Char=floatSep(), groupsize::Int=floatGroup()) =
+    stringpretty(val, groupsize, groupsize, separator, separator)
+stringpretty(val::AbstractFloat,
+  groupsize::Int=floatGroup(), separator::Char=floatSep()) =
+    stringpretty(val, groupsize, groupsize, separator, separator)
 
 
-function stringpretty{T<:Real}(val::T, 
-  groupsize::Int=floatGroup(), iseparator::Char=intSep(), fseparator::Char=floatSep())
-    if !prettyfiable(v)
-       throw(ErrorException("type $T is not supported"))
-    end   
-       
-    prettyFloat(string(val), groupsize, iseparator, fseparator)
-end
-
-stringpretty{T<:AbstractFloat}(val::T, 
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
-  iseparator::Char=intSep(),  fseparator::Char=floatSep()) =
-    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
-
-function stringpretty{T<:Real}(val::T, 
+function stringpretty(val::Real, 
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep())
     if !prettyfiable(v)
@@ -67,115 +72,112 @@ function stringpretty{T<:Real}(val::T,
        
     prettyFloat(string(val), igroupsize, fgroupsize, iseparator, fseparator)
 end
-
-stringpretty{T<:AbstractFloat}(val::T, 
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), separator::Char=floatSep()) =
-    prettyFloat(val, igroupsize, fgroupsize, separator, separator)
-stringpretty{T<:AbstractFloat}(val::T, 
+# allow other variable orderings
+stringpretty(val::Real,
+  iseparator::Char=intSep(), fseparator::Char=floatSep(),
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) =
+    stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
+stringpretty(val::Real,
+  igroupsize::Int=intGroup(), iseparator::Char=intSep(),
+  fgroupsize::Int=floatGroup(), fseparator::Char=floatSep()) =
+    stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
+stringpretty(val::Real,
+  iseparator::Char=intSep(), igroupsize::Int=intGroup(),
+  fseparator::Char=floatSep(), fgroupsize::Int=floatGroup()) =
+    stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
+stringpretty(val::Real,
+  separator::Char=floatSep(), igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) =
+    stringpretty(val, igroupsize, fgroupsize, separator, separator)
+stringpretty(val::Real,
   groupsize::Int=floatGroup(), iseparator::Char=intSep(), fseparator::Char=floatSep()) =
-    prettyFloat(val, groupsize, groupsize, iseparator, fseparator)
-
-stringpretty{T<:Real}(val::T, 
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), separator::Char=floatSep()) =
-    prettyFloat(val, igroupsize, fgroupsize, separator, separator)
-stringpretty{T<:Real}(val::T, 
-  groupsize::Int=floatGroup(), iseparator::Char=intSep(), fseparator::Char=floatSep()) =
-    prettyFloat(val, groupsize, groupsize, iseparator, fseparator)
+    stringpretty(val, groupsize, groupsize, iseparator, fseparator)
+stringpretty(val::Real,
+  separator::Char=floatSep(), groupsize::Int=floatGroup()) =
+    stringpretty(val, groupsize, groupsize, separator, separator)
+stringpretty(val::Real,
+  groupsize::Int=floatGroup(), separator::Char=floatSep()) =
+    stringpretty(val, groupsize, groupsize, separator, separator)
+    
 
 # show easy-to-read numbers
 
 function showpretty(io::IO, val::Signed, 
   groupsize::Int=intGroup(), separator::Char=intSep())
-    s = prettyInteger(val, groupsize, separator)
+    s = stringpretty(val, groupsize, separator)
     print(io, s)
 end
+showpretty(io::IO, val::Signed, separator::Char=intSep(), groupsize::Int=intGroup()) =
+    showpretty(io, val, groupsize, separator)
 
-function showpretty(io::IO, val::AbstractFloat, 
-  groupsize::Int=floatGroup(), 
-  iseparator::Char=intSep(), fseparator::Char=floatSep())
-    s = prettyFloat(val, groupsize, iseparator, fseparator)
+function showpretty{T<:Signed}(io::IO, val::Rational{T}, 
+  groupsize::Int=intGroup(), separator::Char=intSep())
+    s = stringpretty(val, groupsize, separator)
     print(io, s)
 end
-
-function showpretty{T<:Real}(io::IO,  val::T, 
-  groupsize::Int=floatGroup(), 
-  iseparator::Char=intSep(), fseparator::Char=floatSep())
-    s = stringpretty(val, groupsize, iseparator, fseparator)
-    print(io, s)
-end
-
+showpretty{T<:Signed}(io::IO, val::Rational{T},  separator::Char=intSep(), groupsize::Int=intGroup()) =
+    showpretty(io, val, groupsize, separator)
+  
 function showpretty(io::IO, val::AbstractFloat, 
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(),
   iseparator::Char=intSep(), fseparator::Char=floatSep())
-    s = prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+    s = prettystring(val, igroupsize, fgroupsize, iseparator, fseparator)
     print(io, s)
 end
+showpretty(io::IO, val::AbstractFloat, 
+  iseparator::Char=intSep(), fseparator::Char=floatSep(),
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) =
+    showpretty(io, val, igroupsize, fgroupsize, iseparator, fseparator)
+showpretty(io::IO, val::AbstractFloat, groupsize::Int=ifloatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    showpretty(io, val, groupsize, groupsize, iseparator, fseparator)
+showpretty(io::IO, val::AbstractFloat, separator::Char=floatSep(),
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) =
+    showpretty(io, val, igroupsize, fgroupsize, separator, separator)
+showpretty(io::IO, val::AbstractFloat, groupsize::Int=floatGroup(), separator::Char=floatSep()) =
+    showpretty(io, val, groupsize, groupsize, separator, separator)
+showpretty(io::IO, val::AbstractFloat, separator::Char=floatSep(), groupsize::Int=floatGroup()) =
+    showpretty(io, val, groupsize, groupsize, separator, separator)
 
-function showpretty{T<:Real}(io::IO, val::T, 
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
-  iseparator::Char=intSep(), fseparator::Char=floatSep())
-    s = stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
+function showpretty{T<:Real}(io::IO,  val::T, rest...)
+    s = stringpretty(val, rest...)
     print(io, s)
 end
-
-showpretty{T<:AbstractFloat}(io::IO, val::T, 
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
-  separator::Char=floatSep()) =
-    showpretty(io, val, igroupsize, fgroupsize, separator, separator)
-showpretty{T<:AbstractFloat}(io::IO, val::T, 
-  groupsize::Int=floatGroup(), 
-  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
-    showpretty(io, val, groupsize, groupsize, iseparator, fseparator)
-
-showpretty{T<:Real}(io::IO, val::T, 
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
-  separator::Char=floatSep()) =
-    showpretty(io, val, igroupsize, fgroupsize, separator, separator)
-showpretty{T<:Real}(io::IO, val::T, 
-  groupsize::Int=floatGroup(), 
-  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
-    showpretty(io, val, groupsize, groupsize, iseparator, fseparator)
 
 # show on STDOUT
 
 showpretty(val::Signed, groupsize::Int=intGroup(), separator::Char=intSep()) =
     showpretty(Base.STDOUT, val, groupsize, separator)
+showpretty(val::Signed, separator::Char=intSep(), groupsize::Int=intGroup()) =
+    showpretty(Base.STDOUT, val, groupsize, separator)
 
-showpretty(val::AbstractFloat, groupsize::Int=floatGroup(), 
-  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
-    showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
-    
-showpretty{T<:Real}(val::T, groupsize::Int=floatGroup(), 
-  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
-    showpretty(Base.STDOUT, val, groupsize, iseparator, fseparator)
-
+showpretty{T<:Signed}(val::Rational{T}, groupsize::Int=intGroup(), separator::Char=intSep()) =
+    showpretty(Base.STDOUT, val, groupsize, separator)
+showpretty{T<:Signed}(val::Rational{T},  separator::Char=intSep(), groupsize::Int=intGroup()) =
+    showpretty(Base.STDOUT, val, groupsize, separator)
+  
 showpretty(val::AbstractFloat, 
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(),
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     showpretty(Base.STDOUT, val, igroupsize, fgroupsize, iseparator, fseparator)
-    
-showpretty{T<:Real}(val::T,
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
-  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+showpretty(val::AbstractFloat, 
+  iseparator::Char=intSep(), fseparator::Char=floatSep(),
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) =
     showpretty(Base.STDOUT, val, igroupsize, fgroupsize, iseparator, fseparator)
 
-showpretty{T<:AbstractFloat}(val::T, 
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
-  separator::Char=floatSep()) =
-    showpretty(Base.STDOUT, val, igroupsize, fgroupsize, separator, separator)
-showpretty{T<:AbstractFloat}(val::T, 
-  groupsize::Int=floatGroup(), 
+showpretty(val::AbstractFloat, groupsize::Int=ifloatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     showpretty(Base.STDOUT, val, groupsize, groupsize, iseparator, fseparator)
+showpretty(val::AbstractFloat, separator::Char=floatSep(),
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) =
+    showpretty(Base.STDOUT, val, igroupsize, fgroupsize, separator, separator)
+showpretty(val::AbstractFloat, groupsize::Int=floatGroup(), separator::Char=floatSep()) =
+    showpretty(Base.STDOUT, val, groupsize, groupsize, separator, separator)
+showpretty(val::AbstractFloat, separator::Char=floatSep(), groupsize::Int=floatGroup()) =
+    showpretty(Base.STDOUT, val, groupsize, groupsize, separator, separator)
 
-showpretty{T<:Real}(val::T, 
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
-  separator::Char=floatSep()) =
-    showpretty(Base.STDOUT, val, igroupsize, fgroupsize, separator, separator)
-showpretty{T<:Real}(val::T, 
-  groupsize::Int=floatGroup(), 
-  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
-    showpretty(Base.STDOUT, val, groupsize, groupsize, iseparator, fseparator)
+showpretty{T<:Real}(val::T, rest...) =
+    showpretty(Base.STDOUT, val, rest...)
+
 
 # accept integers and floats
 
