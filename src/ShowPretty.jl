@@ -3,12 +3,9 @@ module ShowPretty
 import Base: parse
 
 export stringpretty, showpretty, 
-       prettySizer,  prettySizer!,
-       prettySpacer, prettySpacer!,
-       intSizer,     intSizer!,
-       floatSizer,   floatSizer!,
-       intSpacer,    intSpacer!,
-       floatSpacer,  floatSpacer!
+       prettySizer,  prettySizer!, prettySpacer, prettySpacer!,
+       floatSizer,   floatSizer!,  floatSpacer,  floatSpacer!,
+       intSizer,     intSizer!,    intSpacer,    intSpacer!
        
 const prettySpacerChar = '_'
 const prettySizerCount =  3
