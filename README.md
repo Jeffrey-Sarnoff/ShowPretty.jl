@@ -4,12 +4,12 @@
 To Install: `julia> Pkg.clone("https://github.com/Jeffrey-Sarnoff/ShowPretty.jl")`
 
 ##### Use
-```julia
+```F#
 > using ShowPretty    # exports stringpretty, showpretty, 
                       # intSizer(<nDigitsPerGroup>), floatSizer(<nDigitsPerGroup>)
                       # intSpacer(<UTF8char>), floatSpacer(<UTF8char>),
 
-> intSpacer(), intSizer, floatSpacer(), floatSizer()           # ('_', 4, '_', 4) default values
+> intSpacer(), intSizer(), floatSpacer(), floatSizer()           # ('_', 4, '_', 4) default values
 > intSpacer(','), intSizer(3), floatSpacer('_'), floatSizer(5) # (',', 3, '_', 5) specified values
 
 > stringpretty(1234567) # "1,234,567"
