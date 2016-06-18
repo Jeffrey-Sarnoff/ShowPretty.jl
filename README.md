@@ -22,6 +22,7 @@ To Install: `julia> Pkg.clone("https://github.com/Jeffrey-Sarnoff/ShowPretty.jl"
 
 > intSpacer(','); intSizer(3); showpretty(12345678.87654321)
 1.234,567,887,654,321e7
+
 > showpretty(inv(12345678.87654321),'_',4)
 8.1000_0008_91e-8
 
