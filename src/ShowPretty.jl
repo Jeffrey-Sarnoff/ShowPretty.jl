@@ -23,8 +23,22 @@ stringpretty{T<:Signed}(val::T,
     prettyInteger(val, groupsize, separator)
 
 stringpretty{T<:AbstractFloat}(val::T, 
+  groupsize::Int=floatGroup(), separator::Char=floatSep()) =
+    prettyFloat(val, groupsize, groupsize, separator, separator)
+
+stringpretty{T<:AbstractFloat}(val::T, 
   groupsize::Int=floatGroup(), iseparator::Char=intSep(), fseparator::Char=floatSep()) =
-    prettyFloat(val, groupsize, iseparator, fseparator)
+    prettyFloat(val, groupsize, groupsize, iseparator, fseparator)
+
+stringpretty{T<:AbstractFloat}(val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  separator::Char=floatSep()) =
+    prettyFloat(val, igroupsize, fgroupsize, separator, separator)
+
+stringpretty{T<:AbstractFloat}(val::T, 
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) =
+    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
 
 function stringpretty{T<:Real}(val::T, 
   groupsize::Int=floatGroup(), iseparator::Char=intSep(), fseparator::Char=floatSep())
@@ -167,6 +181,10 @@ prettyInteger{T<:Signed}(v::T, groupsize::Int, separator::Char) =
 prettyFloat{T<:AbstractFloat}(v::T, 
   igroupsize::Int, fgroupsize::Int, iseparator::Char, fseparator::Char) = 
     prettyFloat(string(v), igroupsize, fgroupsize, iseparator, fseparator)
+
+prettyFloat{T<:AbstractFloat}(v::T, 
+  igroupsize::Int, fgroupsize::Int, separator::Char) = 
+    prettyFloat(string(v), igroupsize, fgroupsize, separator, separator)
 
 prettyFloat{T<:AbstractFloat}(v::T, 
   groupsize::Int, iseparator::Char, fseparator::Char) = 
