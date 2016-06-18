@@ -377,6 +377,7 @@ function prettyGroupSeparator!(ch::Char)
     nothing
 end
 prettyGroupSeparator(ch::Int) = prettyGroupSeparator!(ch)
+prettyGroupSeparator(ch::String) = prettyGroupSeparator!(ch[1])
 
 prettyIntGroupSeparator() = intSep()
 function prettyIntGroupSeparator!(ch::Char)
@@ -384,6 +385,7 @@ function prettyIntGroupSeparator!(ch::Char)
     nothing
 end
 prettyIntGroupSeparator(ch::Char) = prettyIntGroupSeparator!(ch)
+prettyIntGroupSeparator(ch::String) = prettyIntGroupSeparator!(ch[1])
 
 prettyFloatGroupSeparator() = floatSep()
 function prettyFloatGroupSeparator!(ch::Char)
@@ -391,6 +393,7 @@ function prettyFloatGroupSeparator!(ch::Char)
     nothing
 end
 prettyFloatGroupSeparator(ch::Char) = prettyFloatGroupSeparator!(ch)
+prettyFloatGroupSeparator(ch::String) = prettyFloatGroupSeparator!(ch[1])
 
 # test: is this a type that can be handled above
 function prettyfiable{T<:Real}(val::T)
