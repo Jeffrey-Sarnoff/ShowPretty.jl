@@ -161,14 +161,14 @@ showpretty{T<:Real}(val::T,
 
 # accept integers and floats
 
-prettyInteger(v::Signed, groupsize::Int, separator::Char) = 
+prettyInteger{T<:Signed}(v::T, groupsize::Int, separator::Char) = 
     integerString(string(v), groupsize, separator)
 
-prettyFloat(v::AbstractFloat, 
+prettyFloat{T<:AbstractFloat}(v::T, 
   groupsize::Int, iseparator::Char, fseparator::Char) = 
     prettyFloat(string(v), groupsize, iseparator, fseparator)
 
-prettyFloat(v::AbstractFloat, groupsize::Int, separator::Char) = 
+prettyFloat{T<:AbstractFloat}(v::T,  groupsize::Int, separator::Char) = 
     prettyFloat(string(v), groupsize, separator, separator)
 
 # handle integer and float strings
