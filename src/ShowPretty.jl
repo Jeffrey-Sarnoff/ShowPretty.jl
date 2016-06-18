@@ -132,6 +132,13 @@ function showpretty{T<:Signed}(io::IO, val::Rational{T})
     show(io, stringpretty(val, group, sep))
 end
 
+function showpretty(io::IO, val::AbstractFloat)
+    group, sep = fltsSpanned(), betweenFlts()
+    show(io, stringpretty(val, group, group, sep, sep))
+end
+showpretty(io::IO, val::AbstractFloat, prettyFormat...) = show(io, stringpretty(val, prettyFormat...)
+
+#=    
 showpretty(io::IO, val::AbstractFloat,
         intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char) =
     show(io, stringpretty(val, intGroup, fracGroup, intSep, fltSep))
@@ -156,10 +163,7 @@ showpretty(io::IO, val::AbstractFloat,
 showpretty(io::IO, val::AbstractFloat,
         sep::Char, group::Int=fltsSpanned()) =
     show(io, stringpretty(val, group, group, sep, sep))
-function showpretty(io::IO, val::AbstractFloat)
-    group, sep = fltsSpanned(), betweenFlts()
-    show(io, stringpretty(val, group, group, sep, sep))
-end
+=#
 
 
 function showpretty(io::IO, val::Real, 
