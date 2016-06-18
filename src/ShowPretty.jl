@@ -2,6 +2,12 @@ module ShowPretty
 
 import Base: parse
 
+
+if VERSION <= v"0.4.999"
+   typealias String AbstractString
+end
+
+
 export 
   # generating and showing prettier numeric strings
       stringpretty, showpretty,
@@ -240,7 +246,11 @@ prettyFloat{T<:AbstractFloat}(v::T,  group::Int, span::Char) =
 
 # handle integer and float strings
 
-splitstr(str::String, at::String) = map(String, split(str, at))
+if VERSION > v"0.4.999"
+   splitstr(str::String, at::String) = map(String, split(str, at))
+else
+   splitstr(str::String, at::String) = map(bytestring, split(str, at))
+end
 
 prettyInteger(s::String, group::Int, span::Char) = 
     integerString(s, group, span)
