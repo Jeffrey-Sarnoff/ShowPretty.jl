@@ -13,10 +13,10 @@ export stringpretty, showpretty,
 const prettySpacerChar = '_'
 const prettySizerCount =  3
 
-const intsizer    = [prettySizerCount ] ; intSizer    = ()->intsizer[1]
-const intspacer   = [prettySpacerChar ] ; intSpacer   = ()->intspacer[1]
-const floatsizer  = [prettySizerCount ] ; floatSizer  = ()->floatsizer[1]
-const floatspacer = [prettySpacerChar ] ; floatSpacer = ()->floatspacer[1]
+const intsizer    = [prettySizerCount ] ; intSizer()    = intsizer[1]
+const intspacer   = [prettySpacerChar ] ; intSpacer()   = intspacer[1]
+const floatsizer  = [prettySizerCount ] ; floatSizer()  = floatsizer[1]
+const floatspacer = [prettySpacerChar ] ; floatSpacer() = floatspacer[1]
 
 #  make numeric strings easier to read
 
