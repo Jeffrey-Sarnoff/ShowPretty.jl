@@ -136,7 +136,7 @@ function showpretty(io::IO, val::AbstractFloat)
     group, sep = fltsSpanned(), betweenFlts()
     show(io, stringpretty(val, group, group, sep, sep))
 end
-showpretty(io::IO, val::AbstractFloat, prettyFormat...) = show(io, stringpretty(val, prettyFormat...)
+showpretty(io::IO, val::AbstractFloat, prettyFormat...) = show(io, stringpretty(val, prettyFormat...))
 
 #=    
 showpretty(io::IO, val::AbstractFloat,
