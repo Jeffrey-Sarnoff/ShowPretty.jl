@@ -229,13 +229,15 @@ prettyFloat{T<:AbstractFloat}(v::T,  groupsize::Int, separator::Char) =
 
 # handle integer and float strings
 
+splitstr(str::String, at::String) = ([string(x) for x in split(str, at)]...)
+
 prettyInteger(s::String, groupsize::Int, separator::Char) = 
     integerString(s, groupsize, separator)
 
 function prettyFloat(s::String, igroupsize::Int, fgroupsize::Int, iseparator::Char, fseparator::Char)
     sinteger, sfrac =
         if contains(s,".")
-           split(s,".")
+           splitstr(s,".")
         else
            s, ""
         end
