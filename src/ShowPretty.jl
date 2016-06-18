@@ -263,7 +263,7 @@ function prettyFloat(s::String, intGroup::Int, fracGroup::Int, intSep::Char, flt
            s, ""
         end
         
-    istr = integerString(sinteger, intGroup, betweenInts)
+    istr = integerString(sinteger, intGroup, intSep)
     if sfrac == ""
        istr
     else
