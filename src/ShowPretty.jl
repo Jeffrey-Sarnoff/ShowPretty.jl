@@ -1,5 +1,7 @@
 module ShowPretty
 
+import Base: parse
+
 export stringpretty, showpretty, 
        prettySizer,  prettySizer!,
        prettySpacer, prettySpacer!,
@@ -394,5 +396,10 @@ function prettyfiable{T<:Real}(val::T)
         false
     end        
 end
+
+parse{T<:Union{Signed,AbstractFloat}}(::Type{T}, s::String, ch::Char) = 
+    parse(T, join(split(s,ch),""))
+parse{T<:AbstractFloat}(::Type{T}, s::String, ch1::Char, ch2::Char) = 
+    parse(T, join(split(s,(ch1,ch2)),""))
 
 end # module
