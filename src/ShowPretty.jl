@@ -31,7 +31,6 @@ stringpretty{T<:Signed}(val::Rational{T}, groupsize::Int=intGroup(), separator::
 stringpretty{T<:Signed}(val::Rational{T}, separator::Char, groupsize::Int) =
     stringpretty(val, groupsize, separator)
 
-
 stringpretty(val::AbstractFloat,
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
@@ -48,10 +47,6 @@ stringpretty(val::AbstractFloat,
     stringpretty(val, igroupsize, fgroupsize, separator, separator)
 stringpretty(val::AbstractFloat, separator::Char, groupsize::Int) =
     stringpretty(val, groupsize, groupsize, separator, separator)
-
-stringpretty(val::AbstractFloat,
-  igroupsize::Int, fgroupsize::Int, separator::Char) =
-    stringpretty(val, igroupsize, fgroupsize, separator, separator)
 stringpretty(val::AbstractFloat,
   groupsize::Int, iseparator::Char, fseparator::Char) =
     stringpretty(val, groupsize, groupsize, iseparator, fseparator)
