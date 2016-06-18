@@ -234,7 +234,7 @@ prettyFloat{T<:AbstractFloat}(v::T,  groupsize::Int, separator::Char) =
 
 # handle integer and float strings
 
-splitstr(str::String, at::String) = ([string(x) for x in split(str, at)]...)
+splitstr(str::String, at::String) = map(String, split(str, at))
 
 prettyInteger(s::String, groupsize::Int, separator::Char) = 
     integerString(s, groupsize, separator)
