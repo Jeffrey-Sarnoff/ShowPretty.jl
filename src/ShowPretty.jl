@@ -3,44 +3,46 @@ module ShowPretty
 import Base: parse
 
 export stringpretty, showpretty, 
-       prettySizer,  prettySizer!, prettySpacer, prettySpacer!,
-       floatSizer,   floatSizer!,  floatSpacer,  floatSpacer!,
-       intSizer,     intSizer!,    intSpacer,    intSpacer!
+       prettyGroup,  prettyGroup!, prettySpacer, prettySpacer!,
+       floatGroup,   floatGroup!,  floatSpacer,  floatSpacer!,
+       intGroup,     intGroup!,    intSpacer,    intSpacer!
        
 const prettySpacerChar = '_'
-const prettySizerCount =  3
+const prettyGroupCount =  3
 
-const intsizer    = [prettySizerCount ] ; intSizer()    = intsizer[1]
+const intgroup    = [prettyGroupCount ] ; intGroup()    = intgroup[1]
 const intspacer   = [prettySpacerChar ] ; intSpacer()   = intspacer[1]
-const floatsizer  = [prettySizerCount ] ; floatSizer()  = floatsizer[1]
+const floatgroup  = [prettyGroupCount ] ; floatGroup()  = floatgroup[1]
 const floatspacer = [prettySpacerChar ] ; floatSpacer() = floatspacer[1]
+
 
 #  make numeric strings easier to read
 
+
 stringpretty(val::Signed, group::Int, spacer::Char=intSpacer()) =
     prettyInteger(val, group, spacer)
-stringpretty(val::Signed, spacer::Char, group::Int=intSizer()) =
+stringpretty(val::Signed, spacer::Char, group::Int=intGroup()) =
     stringpretty(val, group, spacer)
 function stringpretty(val::Signed)
-    group, spacer = intSizer(), intSpacer()
+    group, spacer = intGroup(), intSpacer()
     stringpretty(val, group, spacer)
 end
 
 stringpretty{T<:Signed}(val::Rational{T}, group::Int, spacer::Char=intSpacer()) =
     string(prettyInteger(val.num, group, spacer),"//",prettyInteger(val.den, group, spacer))
-stringpretty{T<:Signed}(val::Rational{T}, spacer::Char, group::Int=intSizer()) =
+stringpretty{T<:Signed}(val::Rational{T}, spacer::Char, group::Int=intGroup()) =
     stringpretty(val, group, spacer)
 function stringpretty{T<:Signed}(val::Rational{T})
-    group, spacer = intSizer(), intSpacer()
+    group, spacer = intGroup(), intSpacer()
     stringpretty(val, group, spacer)
 end
 
 stringpretty(val::AbstractFloat,
-        intSizer::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char) =
-    prettyFloat(val, intSizer, fracGroup, intSpacer, fracSpacer)
+        intGroup::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char) =
+    prettyFloat(val, intGroup, fracGroup, intSpacer, fracSpacer)
 stringpretty(val::AbstractFloat,
-        intSizer::Int, fracGroup::Int, spacer::Char=floatSpacer()) =
-    stringpretty(val, intSizer, fracGroup, spacer, spacer)
+        intGroup::Int, fracGroup::Int, spacer::Char=floatSpacer()) =
+    stringpretty(val, intGroup, fracGroup, spacer, spacer)
 stringpretty(val::AbstractFloat,
         group::Int, intSpacer::Char, fracSpacer::Char) =
     stringpretty(val, group, group, intSpacer, fracSpacer)
@@ -48,46 +50,46 @@ stringpretty(val::AbstractFloat,
         group::Int, spacer::Char=floatSpacer()) =
     stringpretty(val, group, group, spacer, spacer)
 stringpretty(val::AbstractFloat,
-        intSpacer::Char, fracSpacer::Char, intSizer::Int, fracGroup::Int) =
-    stringpretty(val, intSizer, fracGroup, intSpacer, fracSpacer)
+        intSpacer::Char, fracSpacer::Char, intGroup::Int, fracGroup::Int) =
+    stringpretty(val, intGroup, fracGroup, intSpacer, fracSpacer)
 stringpretty(val::AbstractFloat,
         intSpacer::Char, fracSpacer::Char, group::Int) =
     stringpretty(val, group, group, intSpacer, fracSpacer)
 stringpretty(val::AbstractFloat,
-        spacer::Char, intSizer::Int, fracGroup::Int) =
-    stringpretty(val, intSizer, fracGroup, spacer, spacer)
+        spacer::Char, intGroup::Int, fracGroup::Int) =
+    stringpretty(val, intGroup, fracGroup, spacer, spacer)
 stringpretty(val::AbstractFloat,
-        spacer::Char, group::Int=floatSizer()) =
+        spacer::Char, group::Int=floatGroup()) =
     stringpretty(val, group, group, spacer, spacer)
 function stringpretty(val::AbstractFloat)
-    group, spacer = floatSizer(), floatSpacer()
+    group, spacer = floatGroup(), floatSpacer()
     stringpretty(val, group, group, spacer, spacer)
 end
 
 
 function stringpretty(val::Real, 
-          intSizer::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char)
+          intGroup::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char)
     if !prettyfiable(v)
        throw(ErrorException("type $T is not supported"))
     end   
-    prettyFloat(string(val), intSizer, fracGroup, intSpacer, fracSpacer)
+    prettyFloat(string(val), intGroup, fracGroup, intSpacer, fracSpacer)
 end
-stringpretty(val::Real, intSizer::Int, fracGroup::Int, spacer::Char=floatSpacer()) =
-    stringpretty(val, intSizer, fracGroup, spacer, spacer)
+stringpretty(val::Real, intGroup::Int, fracGroup::Int, spacer::Char=floatSpacer()) =
+    stringpretty(val, intGroup, fracGroup, spacer, spacer)
 stringpretty(val::Real, group::Int, intSpacer::Char, fracSpacer::Char) =
     stringpretty(val, group, group, intSpacer, fracSpacer)
 stringpretty(val::Real, group::Int, spacer::Char=floatSpacer()) =
     stringpretty(val, group, group, spacer, spacer)
-stringpretty(val::Real, intSpacer::Char, fracSpacer::Char, intSizer::Int, fracGroup::Int) =
-    stringpretty(val, intSizer, fracGroup, intSpacer, fracSpacer)
+stringpretty(val::Real, intSpacer::Char, fracSpacer::Char, intGroup::Int, fracGroup::Int) =
+    stringpretty(val, intGroup, fracGroup, intSpacer, fracSpacer)
 stringpretty(val::Real, intSpacer::Char, fracSpacer::Char, group::Int) =
     stringpretty(val, group, group, intSpacer, fracSpacer)
-stringpretty(val::Real, spacer::Char, intSizer::Int, fracGroup::Int) =
-    stringpretty(val, intSizer, fracGroup, spacer, spacer)
-stringpretty(val::Real, spacer::Char, group::Int=floatSizer()) =
+stringpretty(val::Real, spacer::Char, intGroup::Int, fracGroup::Int) =
+    stringpretty(val, intGroup, fracGroup, spacer, spacer)
+stringpretty(val::Real, spacer::Char, group::Int=floatGroup()) =
     stringpretty(val, group, group, spacer, spacer)
 function stringpretty(val::Real)
-    group, spacer = floatSizer(), floatSpacer()
+    group, spacer = floatGroup(), floatSpacer()
     stringpretty(val, group, group, spacer, spacer)
 end
 
@@ -96,28 +98,28 @@ end
 
 showpretty(io::IO, val::Signed, group::Int, spacer::Char=intSpacer()) =
     show(io, stringpretty(val, group, spacer))
-showpretty(io::IO, val::Signed, spacer::Char, group::Int=intSizer()) =
+showpretty(io::IO, val::Signed, spacer::Char, group::Int=intGroup()) =
     show(io, stringpretty(val, group, spacer))
 function showpretty(io::IO, val::Signed)
-    group, spacer = intSizer(), intSpacer()
+    group, spacer = intGroup(), intSpacer()
     show(io, stringpretty(val, group, spacer))
 end
 
 showpretty{T<:Signed}(io::IO, val::Rational{T}, group::Int, spacer::Char=intSpacer()) =
     string(prettyInteger(val.num, group, spacer),"//",prettyInteger(val.den, group, spacer))
-showpretty{T<:Signed}(io::IO, val::Rational{T}, spacer::Char, group::Int=intSizer()) =
+showpretty{T<:Signed}(io::IO, val::Rational{T}, spacer::Char, group::Int=intGroup()) =
     show(io, stringpretty(val, group, spacer))
 function showpretty{T<:Signed}(io::IO, val::Rational{T})
-    group, spacer = intSizer(), intSpacer()
+    group, spacer = intGroup(), intSpacer()
     show(io, stringpretty(val, group, spacer))
 end
 
 showpretty(io::IO, val::AbstractFloat,
-        intSizer::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char) =
-    show(io, stringpretty(val, intSizer, fracGroup, intSpacer, fracSpacer))
+        intGroup::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char) =
+    show(io, stringpretty(val, intGroup, fracGroup, intSpacer, fracSpacer))
 showpretty(io::IO, val::AbstractFloat,
-        intSizer::Int, fracGroup::Int, spacer::Char=floatSpacer()) =
-    show(io, stringpretty(val, intSizer, fracGroup, spacer, spacer))
+        intGroup::Int, fracGroup::Int, spacer::Char=floatSpacer()) =
+    show(io, stringpretty(val, intGroup, fracGroup, spacer, spacer))
 showpretty(io::IO, val::AbstractFloat,
         group::Int, intSpacer::Char, fracSpacer::Char) =
     show(io, stringpretty(val, group, group, intSpacer, fracSpacer))
@@ -125,46 +127,46 @@ showpretty(io::IO, val::AbstractFloat,
         group::Int, spacer::Char=floatSpacer()) =
     show(io, stringpretty(val, group, group, spacer, spacer))
 showpretty(io::IO, val::AbstractFloat,
-        intSpacer::Char, fracSpacer::Char, intSizer::Int, fracGroup::Int) =
-    show(io, stringpretty(val, intSizer, fracGroup, intSpacer, fracSpacer))
+        intSpacer::Char, fracSpacer::Char, intGroup::Int, fracGroup::Int) =
+    show(io, stringpretty(val, intGroup, fracGroup, intSpacer, fracSpacer))
 showpretty(io::IO, val::AbstractFloat,
         intSpacer::Char, fracSpacer::Char, group::Int) =
     show(io, stringpretty(val, group, group, intSpacer, fracSpacer))
 showpretty(io::IO, val::AbstractFloat,
-        spacer::Char, intSizer::Int, fracGroup::Int) =
-    show(io, stringpretty(val, intSizer, fracGroup, spacer, spacer))
+        spacer::Char, intGroup::Int, fracGroup::Int) =
+    show(io, stringpretty(val, intGroup, fracGroup, spacer, spacer))
 showpretty(io::IO, val::AbstractFloat,
-        spacer::Char, group::Int=floatSizer()) =
+        spacer::Char, group::Int=floatGroup()) =
     show(io, stringpretty(val, group, group, spacer, spacer))
 function showpretty(io::IO, val::AbstractFloat)
-    group, spacer = floatSizer(), floatSpacer()
+    group, spacer = floatGroup(), floatSpacer()
     show(io, stringpretty(val, group, group, spacer, spacer))
 end
 
 
 function showpretty(io::IO, val::Real, 
-          intSizer::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char)
+          intGroup::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char)
     if !prettyfiable(v)
        throw(ErrorException("type $T is not supported"))
     end   
-    showpretty(io, stringpretty(val, intSizer, fracGroup, intSpacer, fracSpacer))
+    showpretty(io, stringpretty(val, intGroup, fracGroup, intSpacer, fracSpacer))
 end
-showpretty(io::IO, val::Real, intSizer::Int, fracGroup::Int, spacer::Char=floatSpacer()) =
-    show(io, stringpretty(val, intSizer, fracGroup, spacer, spacer))
+showpretty(io::IO, val::Real, intGroup::Int, fracGroup::Int, spacer::Char=floatSpacer()) =
+    show(io, stringpretty(val, intGroup, fracGroup, spacer, spacer))
 showpretty(io::IO, val::Real, group::Int, intSpacer::Char, fracSpacer::Char) =
     show(io, stringpretty(val, group, group, intSpacer, fracSpacer))
 showpretty(io::IO, val::Real, group::Int, spacer::Char=floatSpacer()) =
     show(io, stringpretty(val, group, group, spacer, spacer))
-showpretty(io::IO, val::Real, intSpacer::Char, fracSpacer::Char, intSizer::Int, fracGroup::Int) =
-    show(io, stringpretty(val, intSizer, fracGroup, intSpacer, fracSpacer))
+showpretty(io::IO, val::Real, intSpacer::Char, fracSpacer::Char, intGroup::Int, fracGroup::Int) =
+    show(io, stringpretty(val, intGroup, fracGroup, intSpacer, fracSpacer))
 showpretty(io::IO, val::Real, intSpacer::Char, fracSpacer::Char, group::Int) =
     show(io, stringpretty(val, group, group, intSpacer, fracSpacer))
-showpretty(io::IO, val::Real, spacer::Char, intSizer::Int, fracGroup::Int) =
-    show(io, stringpretty(val, intSizer, fracGroup, spacer, spacer))
-showpretty(io::IO, val::Real, spacer::Char, group::Int=floatSizer()) =
+showpretty(io::IO, val::Real, spacer::Char, intGroup::Int, fracGroup::Int) =
+    show(io, stringpretty(val, intGroup, fracGroup, spacer, spacer))
+showpretty(io::IO, val::Real, spacer::Char, group::Int=floatGroup()) =
     show(io, stringpretty(val, group, group, spacer, spacer))
 function showpretty(io::IO, val::Real)
-    group, spacer = floatSizer(), floatSpacer()
+    group, spacer = floatGroup(), floatSpacer()
     show(io, stringpretty(val, group, group, spacer, spacer))
 end
 
@@ -173,33 +175,33 @@ end
 
 showpretty(val::Signed, group::Int, spacer::Char=intSpacer()) =
     showpretty(Base.STDOUT, val, group, spacer)
-showpretty(val::Signed, spacer::Char, group::Int=intSizer()) =
+showpretty(val::Signed, spacer::Char, group::Int=intGroup()) =
     showpretty(Base.STDOUT, val, group, spacer)
 function showpretty(val::Signed)
-    group, spacer = intSizer(), intSpacer()
+    group, spacer = intGroup(), intSpacer()
     showpretty(Base.STDOUT, val, group, spacer)
 end
 
 showpretty{T<:Signed}(val::Rational{T}, group::Int, spacer::Char=intSpacer()) =
     string(prettyInteger(val.num, group, spacer),"//",prettyInteger(val.den, group, spacer))
-showpretty{T<:Signed}(val::Rational{T}, spacer::Char, group::Int=intSizer()) =
+showpretty{T<:Signed}(val::Rational{T}, spacer::Char, group::Int=intGroup()) =
     showpretty(Base.STDOUT, val, group, spacer)
 function showpretty{T<:Signed}(val::Rational{T})
-    group, spacer = intSizer(), intSpacer()
+    group, spacer = intGroup(), intSpacer()
     showpretty(Base.STDOUT, val, group, spacer)
 end
 
 showpretty(val::AbstractFloat,
-        intSizer::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char) =
-    showpretty(Base.STDOUT, val, intSizer, fracGroup, intSpacer, fracSpacer)
+        intGroup::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char) =
+    showpretty(Base.STDOUT, val, intGroup, fracGroup, intSpacer, fracSpacer)
 showpretty(val::AbstractFloat, rest...) = showpretty(Base.STDOUT, rest...)
 
 function showpretty(val::Real, 
-          intSizer::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char)
+          intGroup::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char)
     if !prettyfiable(v)
        throw(ErrorException("type $T is not supported"))
     end   
-    showpretty(Base.STDOUT, val, intSizer, fracGroup, intSpacer, fracSpacer)
+    showpretty(Base.STDOUT, val, intGroup, fracGroup, intSpacer, fracSpacer)
 end
 showpretty(val::Real, rest...) = showpretty(Base.STDOUT, rest...)
 
@@ -210,12 +212,12 @@ prettyInteger{T<:Signed}(v::T, group::Int, spacer::Char) =
     integerString(string(v), group, spacer)
 
 prettyFloat{T<:AbstractFloat}(v::T, 
-  intSizer::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char) = 
-    prettyFloat(string(v), intSizer, fracGroup, intSpacer, fracSpacer)
+  intGroup::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char) = 
+    prettyFloat(string(v), intGroup, fracGroup, intSpacer, fracSpacer)
 
 prettyFloat{T<:AbstractFloat}(v::T, 
-  intSizer::Int, fracGroup::Int, spacer::Char) = 
-    prettyFloat(string(v), intSizer, fracGroup, spacer, spacer)
+  intGroup::Int, fracGroup::Int, spacer::Char) = 
+    prettyFloat(string(v), intGroup, fracGroup, spacer, spacer)
 
 prettyFloat{T<:AbstractFloat}(v::T, 
   group::Int, intSpacer::Char, fracSpacer::Char) = 
@@ -231,7 +233,7 @@ splitstr(str::String, at::String) = map(String, split(str, at))
 prettyInteger(s::String, group::Int, spacer::Char) = 
     integerString(s, group, spacer)
 
-function prettyFloat(s::String, intSizer::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char)
+function prettyFloat(s::String, intGroup::Int, fracGroup::Int, intSpacer::Char, fracSpacer::Char)
     sinteger, sfrac =
         if contains(s,".")
            splitstr(s,".")
@@ -239,7 +241,7 @@ function prettyFloat(s::String, intSizer::Int, fracGroup::Int, intSpacer::Char, 
            s, ""
         end
         
-    istr = integerString(sinteger, intSizer, intSpacer)
+    istr = integerString(sinteger, intGroup, intSpacer)
     if sfrac == ""
        istr
     else
@@ -254,8 +256,8 @@ prettyFloat(s::String, group::Int, spacer::Char) =
 prettyFloat(s::String, group::Int, intSpacer::Char, fracSpacer::Char) = 
     prettyFloat(s, group, group, intSpacer, fracSpacer)
 
-prettyFloat(s::String, intSizer::Int, fracGroup::Int, spacer::Char) = 
-    prettyFloat(s, intSizer, fracGroup, spacer, spacer)
+prettyFloat(s::String, intGroup::Int, fracGroup::Int, spacer::Char) = 
+    prettyFloat(s, intGroup, fracGroup, spacer, spacer)
 
 # do the work
 
@@ -337,28 +339,28 @@ end
 # get and set shared parameters
 
 
-function intSizer!(n::Int)
+function intGroup!(n::Int)
     n = max(0,n)
-    intsizer[1]   = n
+    intgroup[1]   = n
     nothing
 end
-intSizer(n::Int) = intSizer!(n)
+intGroup(n::Int) = intGroup!(n)
 
-function floatSizer!(n::Int)
+function floatGroup!(n::Int)
     n = max(0,n)
-    floatSizer[1]   = n
+    floatGroup[1]   = n
     nothing
 end
-floatSizer(n::Int) = floatSizer!(n)
+floatGroup(n::Int) = floatGroup!(n)
 
-prettySizer() = (intSizer() == floatSizer()) ? intSizer() : (intSizer(), floatSizer())
-function prettySizer!(n::Int)
+prettyGroup() = (intGroup() == floatGroup()) ? intGroup() : (intGroup(), floatGroup())
+function prettyGroup!(n::Int)
     n = max(0,n)
-    intSizer!(n)
-    floatSizer!(n)
+    intGroup!(n)
+    floatGroup!(n)
     nothing
 end
-prettySizer(n::Int) = prettySizer!(n)
+prettyGroup(n::Int) = prettyGroup!(n)
 
 
 prettySpacer() = (intSpacer() == floatSpacer()) ? intSpacer() : (intSpacer(), floatSpacer())
