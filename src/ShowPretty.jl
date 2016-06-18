@@ -165,6 +165,10 @@ prettyInteger{T<:Signed}(v::T, groupsize::Int, separator::Char) =
     integerString(string(v), groupsize, separator)
 
 prettyFloat{T<:AbstractFloat}(v::T, 
+  igroupsize::Int, fgroupsize::Int, iseparator::Char, fseparator::Char) = 
+    prettyFloat(string(v), igroupsize, fgroupsize, iseparator, fseparator)
+
+prettyFloat{T<:AbstractFloat}(v::T, 
   groupsize::Int, iseparator::Char, fseparator::Char) = 
     prettyFloat(string(v), groupsize, iseparator, fseparator)
 
