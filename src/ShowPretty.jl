@@ -57,8 +57,7 @@ stringpretty(val::AbstractFloat,
     stringpretty(val, groupsize, groupsize, separator, separator)
 
 function stringpretty(val::AbstractFloat)
-    groupsize=floatGroup();
-    separator=floatSep());
+    groupsize, separator = floatGroup(), floatSep()
     stringpretty(val, groupsize, groupsize, separator, separator)
 end
 
