@@ -148,34 +148,6 @@ showpretty(io::IO, val::AbstractFloat, prettyFormat...) =
     show(io, stringpretty(val, prettyFormat...))
 
 
-     
-#=    
-showpretty(io::IO, val::AbstractFloat,
-        intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char) =
-    show(io, stringpretty(val, intGroup, fracGroup, intSep, fltSep))
-showpretty(io::IO, val::AbstractFloat,
-        intGroup::Int, fracGroup::Int, sep::Char=betweenFlts()) =
-    show(io, stringpretty(val, intGroup, fracGroup, sep, sep))
-showpretty(io::IO, val::AbstractFloat,
-        group::Int, intSep::Char, fltSep::Char) =
-    show(io, stringpretty(val, group, group, intSep, fltSep))
-showpretty(io::IO, val::AbstractFloat,
-        group::Int, sep::Char=betweenFlts()) =
-    show(io, stringpretty(val, group, group, sep, sep))
-showpretty(io::IO, val::AbstractFloat,
-        intSep::Char, fltSep::Char, intGroup::Int, fracGroup::Int) =
-    show(io, stringpretty(val, intGroup, fracGroup, intSep, fltSep))
-showpretty(io::IO, val::AbstractFloat,
-        intSep::Char, fltSep::Char, group::Int) =
-    show(io, stringpretty(val, group, group, intSep, fltSep))
-showpretty(io::IO, val::AbstractFloat,
-        sep::Char, intGroup::Int, fracGroup::Int) =
-    show(io, stringpretty(val, intGroup, fracGroup, sep, sep))
-showpretty(io::IO, val::AbstractFloat,
-        sep::Char, group::Int=fltsSpanned()) =
-    show(io, stringpretty(val, group, group, sep, sep))
-=#
-
 
 function showpretty(io::IO, val::Real, 
           intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char)
@@ -184,24 +156,21 @@ function showpretty(io::IO, val::Real,
     end   
     showpretty(io, stringpretty(val, intGroup, fracGroup, intSep, fltSep))
 end
-showpretty(io::IO, val::Real, intGroup::Int, fracGroup::Int, sep::Char=betweenFlts()) =
-    show(io, stringpretty(val, intGroup, fracGroup, sep, sep))
-showpretty(io::IO, val::Real, group::Int, intSep::Char, fltSep::Char) =
-    show(io, stringpretty(val, group, group, intSep, fltSep))
-showpretty(io::IO, val::Real, group::Int, sep::Char=betweenFlts()) =
-    show(io, stringpretty(val, group, group, sep, sep))
-showpretty(io::IO, val::Real, intSep::Char, fltSep::Char, intGroup::Int, fracGroup::Int) =
-    show(io, stringpretty(val, intGroup, fracGroup, intSep, fltSep))
-showpretty(io::IO, val::Real, intSep::Char, fltSep::Char, group::Int) =
-    show(io, stringpretty(val, group, group, intSep, fltSep))
-showpretty(io::IO, val::Real, sep::Char, intGroup::Int, fracGroup::Int) =
-    show(io, stringpretty(val, intGroup, fracGroup, sep, sep))
-showpretty(io::IO, val::Real, sep::Char, group::Int=fltsSpanned()) =
-    show(io, stringpretty(val, group, group, sep, sep))
 function showpretty(io::IO, val::Real)
     group, sep = fltsSpanned(), betweenFlts()
-    show(io, stringpretty(val, group, group, sep, sep))
+    showpretty(io, val, group, group, sep, sep)
 end
+function showpretty(io::IO, val::Real, group::Int)
+    sep = betweenFlts()
+    showpretty(io, val, group, group, sep, sep)
+end
+function showpretty(io::IO, val::Real, sep::Char)
+    group = fltsSpanned()
+    showpretty(io, val, group, group, sep, sep)
+end
+showpretty(io::IO, val::Real, prettyFormat...) = 
+    show(io, stringpretty(val, prettyFormat...))
+
 
 # show on STDOUT
 
@@ -235,14 +204,18 @@ showpretty(val::AbstractFloat, prettyFormat...) =
     showpretty(Base.STDOUT, val, prettyFormat...)
 
 
-function showpretty(val::Real, 
-          intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char)
+function showpretty{T<:Real}(val::T, intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char)
     if !prettyfiable(v)
        throw(ErrorException("type $T is not supported"))
     end   
     showpretty(Base.STDOUT, val, intGroup, fracGroup, intSep, fltSep)
 end
-showpretty(val::Real, rest...) = showpretty(Base.STDOUT, rest...)
+showpretty(val::Real, group::Int) = 
+    showpretty(Base.STDOUT, val, group)
+showpretty(val::Real, sep::Char)  = 
+    showpretty(Base.STDOUT, val, sep)
+showpretty(val::Real, prettyFormat...) =
+    showpretty(Base.STDOUT, val, prettyFormat...)
 
 
 # accept integers and floats
