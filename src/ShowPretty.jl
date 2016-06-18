@@ -23,6 +23,7 @@ stringpretty{T<:Signed}(val::T,
   groupsize::Int=intGroup(), separator::Char=intSep()) =
     prettyInteger(val, groupsize, separator)
 
+#=
 stringpretty{T<:AbstractFloat}(val::T, 
   groupsize::Int=floatGroup(), separator::Char=floatSep()) =
     prettyFloat(val, groupsize, groupsize, separator, separator)
