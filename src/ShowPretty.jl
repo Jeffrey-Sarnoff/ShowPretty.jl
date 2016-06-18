@@ -22,12 +22,13 @@ stringpretty{T<:Signed}(val::T,
   groupsize::Int=intGroup(), separator::Char=intSep()) =
     prettyInteger(val, groupsize, separator)
 
-stringpretty{T<:AbstractFloat}(
-  val::T, groupsize::Int=floatGroup(), 
+stringpretty{T<:AbstractFloat}(val::T, 
+  groupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     prettyFloat(val, groupsize, iseparator, fseparator)
 
-function stringpretty{T<:Real}(val::T, groupsize::Int=floatGroup(), 
+function stringpretty{T<:Real}(val::T, 
+  groupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep())
     if !prettyfiable(v)
        throw(ErrorException("type $T is not supported"))
@@ -71,21 +72,21 @@ stringpretty{T<:Real}(val::T,
 
 # show easy-to-read numbers
 
-function showpretty(io::IO, 
-  val::Signed, groupsize::Int=intGroup(), separator::Char=intSep())
+function showpretty(io::IO, val::Signed, 
+  groupsize::Int=intGroup(), separator::Char=intSep())
     s = prettyInteger(val, groupsize, separator)
     print(io, s)
 end
 
-function showpretty(io::IO, 
-  val::AbstractFloat, groupsize::Int=floatGroup(), 
+function showpretty(io::IO, val::AbstractFloat, 
+  groupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep())
     s = prettyFloat(val, groupsize, iseparator, fseparator)
     print(io, s)
 end
 
-function showpretty{T<:Real}(io::IO, 
-  val::T, groupsize::Int=floatGroup(), 
+function showpretty{T<:Real}(io::IO,  val::T, 
+  groupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep())
     s = stringpretty(val, groupsize, iseparator, fseparator)
     print(io, s)
