@@ -19,24 +19,11 @@ const floatsep   = [groupSeparator] ; floatSep=()->floatsep[1]
 #  make numeric strings easier to read
 
 
-stringpretty{T<:Signed}(val::T, 
-  groupsize::Int=intGroup(), separator::Char=intSep()) =
+stringpretty{T<:Signed}(val::T, groupsize::Int=intGroup(), separator::Char=intSep()) =
     prettyInteger(val, groupsize, separator)
-
-#=
-stringpretty{T<:AbstractFloat}(val::T, 
-  groupsize::Int=floatGroup(), separator::Char=floatSep()) =
-    prettyFloat(val, groupsize, groupsize, separator, separator)
-
-stringpretty{T<:AbstractFloat}(val::T, 
-  groupsize::Int=floatGroup(), iseparator::Char=intSep(), fseparator::Char=floatSep()) =
-    prettyFloat(val, groupsize, groupsize, iseparator, fseparator)
-
-stringpretty{T<:AbstractFloat}(val::T, 
-  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
-  separator::Char=floatSep()) =
-    prettyFloat(val, igroupsize, fgroupsize, separator, separator)
-=#
+# allow other variable ordering
+stringpretty{T<:Signed}(val::T, separator::Char=intSep(), groupsize::Int=intGroup()) =
+    stringpretty(val, groupsize, separator)
 
 stringpretty{T<:AbstractFloat}(val::T, 
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
@@ -46,15 +33,15 @@ stringpretty{T<:AbstractFloat}(val::T,
 stringpretty{T<:AbstractFloat}(val::T, 
   iseparator::Char=intSep(), fseparator::Char=floatSep(),
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) =
-    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+    stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
 stringpretty{T<:AbstractFloat}(val::T, 
   igroupsize::Int=intGroup(), iseparator::Char=intSep(),
   fgroupsize::Int=floatGroup(), fseparator::Char=floatSep()) =
-    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+    stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
 stringpretty{T<:AbstractFloat}(val::T, 
   iseparator::Char=intSep(), igroupsize::Int=intGroup(),
   fseparator::Char=floatSep(), fgroupsize::Int=floatGroup()) =
-    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+    stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
 
 
 function stringpretty{T<:Real}(val::T, 
