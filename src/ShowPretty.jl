@@ -39,10 +39,10 @@ stringpretty(val::AbstractFloat,
     stringpretty(val, igroupsize, fgroupsize, separator, separator)
 stringpretty(val::AbstractFloat,
         groupsize::Int, iseparator::Char, fseparator::Char) =
-    prettyFloat(val, groupsize, groupsize, iseparator, fseparator)
+    stringpretty(val, groupsize, groupsize, iseparator, fseparator)
 stringpretty(val::AbstractFloat,
         groupsize::Int, separator::Char=floatSep()) =
-    prettyFloat(val, groupsize, groupsize, separator, separator)
+    stringpretty(val, groupsize, groupsize, separator, separator)
 stringpretty(val::AbstractFloat,
         iseparator::Char, fseparator::Char, igroupsize::Int, fgroupsize::Int) =
     stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
