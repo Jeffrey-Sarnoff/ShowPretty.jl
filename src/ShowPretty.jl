@@ -144,10 +144,13 @@ function showpretty(io::IO, val::AbstractFloat, sep::Char)
     group = fltsSpanned()
     show(io, stringpretty(val, group, group, sep, sep))
 end
-
 showpretty(io::IO, val::AbstractFloat, prettyFormat...) = 
     show(io, stringpretty(val, prettyFormat...))
 
+showpretty(val::AbstractFloat, prettyFormat...) =
+     showpretty(Base.STDOUT, val, prettyFormat...)
+     
+     
 #=    
 showpretty(io::IO, val::AbstractFloat,
         intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char) =
