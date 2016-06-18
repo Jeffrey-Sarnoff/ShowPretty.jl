@@ -42,6 +42,20 @@ stringpretty{T<:AbstractFloat}(val::T,
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+# allow other variable orderings
+stringpretty{T<:AbstractFloat}(val::T, 
+  iseparator::Char=intSep(), fseparator::Char=floatSep(),
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) =
+    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+stringpretty{T<:AbstractFloat}(val::T, 
+  igroupsize::Int=intGroup(), iseparator::Char=intSep(),
+  fgroupsize::Int=floatGroup(), fseparator::Char=floatSep()) =
+    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+stringpretty{T<:AbstractFloat}(val::T, 
+  iseparator::Char=intSep(), igroupsize::Int=intGroup(),
+  fseparator::Char=floatSep(), fgroupsize::Int=floatGroup()) =
+    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+
 
 function stringpretty{T<:Real}(val::T, 
   groupsize::Int=floatGroup(), iseparator::Char=intSep(), fseparator::Char=floatSep())
