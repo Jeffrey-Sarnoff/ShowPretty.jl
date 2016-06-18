@@ -1,20 +1,20 @@
 module ShowPretty
 
 export stringpretty, showpretty, 
-       prettyGroupSizer,  prettyGroupSizer!,
-       prettyGroupSpacer, prettyGroupSpacer!,
-       prettyIntSizer,    prettyIntSizer!,
-       prettyFloatSizer,  prettyFloatSizer!,
-       prettyIntSpacer,   prettyIntSpacer!,
-       prettyFloatSpacer, prettyFloatSpacer!
+       prettySizer,  prettySizer!,
+       prettySpacer, prettySpacer!,
+       intSizer,     intSizer!,
+       floatSizer,   floatSizer!,
+       intSpacer,    intSpacer!,
+       floatSpacer,  floatSpacer!
        
-const groupSpacer  = '_'
-const groupSizer  =  4
+const prettySpacer = '_'
+const prettySizer  =  3
 
-const intsizer    = [groupSizer ] ; intSizer    =()->intsizer[1]
-const intspacer   = [groupSpacer] ; intSpacer   =()->intspacer[1]
-const floatsizer  = [groupSizer ] ; floatSizer  =()->floatsizer[1]
-const floatspacer = [groupSpacer] ; floatSpacer =()->floatspacer[1]
+const intsizer    = [prettySizer ] ; intSizer    = ()->intsizer[1]
+const intspacer   = [prettySpacer] ; intSpacer   = ()->intspacer[1]
+const floatsizer  = [prettySizer ] ; floatSizer  = ()->floatsizer[1]
+const floatspacer = [prettySpacer] ; floatSpacer = ()->floatspacer[1]
 
 #  make numeric strings easier to read
 
@@ -337,30 +337,28 @@ end
 
 # get and set shared parameters
 
-prettyGroupSizer() = (intSizer() == floatSizer()) ? intSizer() : (intSizer(), floatSizer())
-function prettyGroupSizer!(n::Int)
+prettySizer() = (intSizer() == floatSizer()) ? intSizer() : (intSizer(), floatSizer())
+function prettySizer!(n::Int)
     n = max(0,n)
     prettyIntSizer!(n)
     prettyFloatSizer!(n)
     nothing
 end
-prettyGroupSizer(n::Int) = prettyGroupSizer!(n)
+prettySizer(n::Int) = prettySizer!(n)
 
-prettyIntSizer() = intSizer()
-function prettyIntSizer!(n::Int)
+function intSizer!(n::Int)
     n = max(0,n)
     intSizer[1]   = n
     nothing
 end
-prettyIntSizer(n::Int) = prettyIntSizer!(n)
+intSizer(n::Int) = intSizer!(n)
 
-prettyFloatSizer() = floatSizer()
-function prettyFloatSizer!(n::Int)
+function floatSizer!(n::Int)
     n = max(0,n)
     floatSizer[1]   = n
     nothing
 end
-prettyFloatSizer(n::Int) = prettyFloatSizer!(n)
+floatSizer(n::Int) = floatSizer!(n)
 
 
 prettyGroupSpacer() = (intSpacer() == floatSpacer()) ? intSpacer() : (intSpacer(), floatSpacer())
