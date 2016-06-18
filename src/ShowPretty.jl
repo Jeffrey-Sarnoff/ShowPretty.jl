@@ -37,6 +37,26 @@ stringpretty(val::AbstractFloat,
     prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
 # allow other variable orderings
 stringpretty(val::AbstractFloat,
+  iseparator::Char=intSep(), fseparator::Char=floatSep(),
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) = 
+    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+stringpretty(val::AbstractFloat, separator::Char=floatSep(),
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup()) = 
+    prettyFloat(val, igroupsize, fgroupsize, separator, separator)
+stringpretty(val::AbstractFloat, groupsize::Int=floatGroup(),
+  iseparator::Char=intSep(), fseparator::Char=floatSep()) = 
+    prettyFloat(val, groupsize, groupsize, iseparator, fseparator)
+stringpretty(val::AbstractFloat,
+  iseparator::Char=intSep(), fseparator::Char=floatSep(),
+  groupsize::Int=floatGroup()) = 
+    prettyFloat(val, groupsize, groupsize, iseparator, fseparator)
+stringpretty(val::AbstractFloat,
+  igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(),
+  separator::Char=floatSep()) = 
+    prettyFloat(val, igroupsize, fgroupsize, separator, separator)
+    
+#=    
+stringpretty(val::AbstractFloat,
   iseparator::Char, fseparator::Char, igroupsize::Int, fgroupsize::Int) =
     stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
 stringpretty(val::AbstractFloat,
@@ -52,7 +72,7 @@ stringpretty(val::AbstractFloat,
     stringpretty(val, groupsize, groupsize, iseparator, fseparator)
 stringpretty(val::AbstractFloat, groupsize::Int, separator::Char) =
     stringpretty(val, groupsize, groupsize, separator, separator)
-
+=#
 
 function stringpretty(val::Real, 
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
