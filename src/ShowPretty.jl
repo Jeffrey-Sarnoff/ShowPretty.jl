@@ -56,6 +56,10 @@ stringpretty(val::AbstractFloat,
         separator::Char, groupsize::Int=floatGroup()) =
     stringpretty(val, groupsize, groupsize, separator, separator)
 
+stringpretty(val::AbstractFloat,
+        groupsize::Int=floatGroup(), separator::Char=floatSep()) =
+    stringpretty(val, groupsize, groupsize, separator, separator)
+
 #=
 stringpretty(val::AbstractFloat,
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
