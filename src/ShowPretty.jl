@@ -147,9 +147,7 @@ end
 showpretty(io::IO, val::AbstractFloat, prettyFormat...) = 
     show(io, stringpretty(val, prettyFormat...))
 
-showpretty(val::AbstractFloat, prettyFormat...) =
-     showpretty(Base.STDOUT, val, prettyFormat...)
-     
+
      
 #=    
 showpretty(io::IO, val::AbstractFloat,
@@ -226,10 +224,16 @@ function showpretty{T<:Signed}(val::Rational{T})
     showpretty(Base.STDOUT, val, group, sep)
 end
 
-showpretty(val::AbstractFloat,
-        intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char) =
+function showpretty(val::AbstractFloat, intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char)
     showpretty(Base.STDOUT, val, intGroup, fracGroup, intSep, fltSep)
-showpretty(val::AbstractFloat, rest...) = showpretty(Base.STDOUT, rest...)
+end
+showpretty(val::AbstractFloat, group::Int) = 
+    showpretty(Base.STDOUT, val, group)
+showpretty(val::AbstractFloat, sep::Char)  = 
+    showpretty(Base.STDOUT, val, sep)
+showpretty(val::AbstractFloat, prettyFormat...) =
+    showpretty(Base.STDOUT, val, prettyFormat...)
+
 
 function showpretty(val::Real, 
           intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char)
