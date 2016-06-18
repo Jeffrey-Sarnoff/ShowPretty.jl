@@ -32,6 +32,32 @@ stringpretty{T<:Signed}(val::Rational{T}, separator::Char, groupsize::Int) =
     stringpretty(val, groupsize, separator)
 
 stringpretty(val::AbstractFloat,
+        igroupsize::Int, fgroupsize::Int, iseparator::Char, fseparator::Char) =
+    prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
+stringpretty(val::AbstractFloat,
+        igroupsize::Int, fgroupsize::Int, separator::Char=floatSep()) =
+    stringpretty(val, igroupsize, fgroupsize, separator, separator)
+stringpretty(val::AbstractFloat,
+        groupsize::Int, iseparator::Char, fseparator::Char) =
+    prettyFloat(val, groupsize, groupsize, iseparator, fseparator)
+stringpretty(val::AbstractFloat,
+        groupsize::Int, separator::Char=floatSep()) =
+    prettyFloat(val, groupsize, groupsize, separator, separator)
+stringpretty(val::AbstractFloat,
+        iseparator::Char, fseparator::Char, igroupsize::Int, fgroupsize::Int) =
+    stringpretty(val, igroupsize, fgroupsize, iseparator, fseparator)
+stringpretty(val::AbstractFloat,
+        iseparator::Char, fseparator::Char, groupsize::Int) =
+    stringpretty(val, groupsize, groupsize, iseparator, fseparator)
+stringpretty(val::AbstractFloat,
+        separator::Char, igroupsize::Int, fgroupsize::Int) =
+    stringpretty(val, igroupsize, fgroupsize, separator, separator)
+stringpretty(val::AbstractFloat,
+        separator::Char, groupsize::Int=floatGroup()) =
+    stringpretty(val, groupsize, groupsize, separator, separator)
+
+#=
+stringpretty(val::AbstractFloat,
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(), 
   iseparator::Char=intSep(), fseparator::Char=floatSep()) =
     prettyFloat(val, igroupsize, fgroupsize, iseparator, fseparator)
@@ -54,7 +80,7 @@ stringpretty(val::AbstractFloat,
   igroupsize::Int=intGroup(), fgroupsize::Int=floatGroup(),
   separator::Char=floatSep()) = 
     prettyFloat(val, igroupsize, fgroupsize, separator, separator)
-    
+=#    
 #=    
 stringpretty(val::AbstractFloat,
   iseparator::Char, fseparator::Char, igroupsize::Int, fgroupsize::Int) =
