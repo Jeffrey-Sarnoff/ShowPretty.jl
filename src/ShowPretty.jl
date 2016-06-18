@@ -339,18 +339,10 @@ end
 
 # get and set shared parameters
 
-prettySizer() = (intSizer() == floatSizer()) ? intSizer() : (intSizer(), floatSizer())
-function prettySizer!(n::Int)
-    n = max(0,n)
-    prettyIntSizer!(n)
-    prettyFloatSizer!(n)
-    nothing
-end
-prettySizer(n::Int) = prettySizer!(n)
 
 function intSizer!(n::Int)
     n = max(0,n)
-    intSizer[1]   = n
+    intsizer[1]   = n
     nothing
 end
 intSizer(n::Int) = intSizer!(n)
@@ -362,33 +354,41 @@ function floatSizer!(n::Int)
 end
 floatSizer(n::Int) = floatSizer!(n)
 
-
-prettyGroupSpacer() = (intSpacer() == floatSpacer()) ? intSpacer() : (intSpacer(), floatSpacer())
-function prettyGroupSpacer!(ch::Char)
-    prettyFloatSpacer!(ch)
-    prettyIntSpacer!(ch)
+prettySizer() = (intSizer() == floatSizer()) ? intSizer() : (intSizer(), floatSizer())
+function prettySizer!(n::Int)
+    n = max(0,n)
+    intSizer!(n)
+    floatSizer!(n)
     nothing
 end
-prettyGroupSpacer(ch::Int) = prettyGroupSpacer!(ch)
-prettyGroupSpacer(ch::String) = prettyGroupSpacer!(ch[1])
+prettySizer(n::Int) = prettySizer!(n)
 
-prettyIntSpacer() = intSpacer()
-function prettyIntSpacer!(ch::Char)
+
+prettySpacer() = (intSpacer() == floatSpacer()) ? intSpacer() : (intSpacer(), floatSpacer())
+function prettySpacer!(ch::Char)
+    floatSpacer!(ch)
+    intSpacer!(ch)
+    nothing
+end
+prettySpacer!(s::String) = prettySpacer!(s[1])
+prettySpacer(ch::Int)    = prettySpacer!(ch)
+prettySpacer(s::String)  = prettySpacer!(s)
+
+function intSpacer!(ch::Char)
     intspacer[1] = ch
     nothing
 end
-prettyIntSpacer(ch::Char) = prettyIntSpacer!(ch)
-prettyIntSpacer(ch::String) = prettyIntSpacer!(ch[1])
+intSpacer(ch::Char)  = intSpacer!(ch)
+intSpacer(s::String) = intSpacer!(s[1])
 
-prettyFloatSpacer() = floatSpacer()
-function prettyFloatSpacer!(ch::Char)
+function floatSpacer!(ch::Char)
     floatspacer[1] = ch
     nothing
 end
-prettyFloatSpacer(ch::Char) = prettyFloatSpacer!(ch)
-prettyFloatSpacer(ch::String) = prettyFloatSpacer!(ch[1])
+floatSpacer(ch::Char)  = floatSpacer!(ch)
+floatSpacer(s::String) = floatSpacer!(s[1])
 
-# test: is this a type that can be handled above
+# is this a type that can be handled above
 function prettyfiable{T<:Real}(val::T)
     try
         convert(BigFloat,v); true
@@ -397,6 +397,7 @@ function prettyfiable{T<:Real}(val::T)
     end        
 end
 
+# parse pretty numeric strings
 parse{T<:Union{Signed,AbstractFloat}}(::Type{T}, s::String, ch::Char) = 
     parse(T, join(split(s,ch),""))
 parse{T<:AbstractFloat}(::Type{T}, s::String, ch1::Char, ch2::Char) = 
