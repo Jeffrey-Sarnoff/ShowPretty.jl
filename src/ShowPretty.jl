@@ -1,4 +1,4 @@
-module ShowPretty
+# module ReadableNumbers
 
 import Base: parse
 
@@ -7,16 +7,17 @@ if VERSION <= v"0.4.999"
    typealias String AbstractString
 end
 
-
-export 
+#=
+export
   # generating and showing prettier numeric strings
       stringpretty, showpretty,
   # span char: UTF8 char used to separate spans of contiguous digits
       betweenNums , betweenInts , betweenFlts ,
       betweenNums!, betweenInts!, betweenFlts!,
   # span size: the number of contiguous digits used to form a span
-      numsSpanned , intsSpanned , fltsSpanned , 
+      numsSpanned , intsSpanned , fltsSpanned ,
       numsSpanned!, intsSpanned!, fltsSpanned!
+=#
 
 # module level control of numeric string formatting (span char, span size)
 #   span char and span size are each the only value within a const vector
@@ -85,11 +86,12 @@ function stringpretty(val::AbstractFloat)
 end
 
 
-function stringpretty(val::Real, 
+function stringpretty(val::Real,
           intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char)
-    if !prettyfiable(v)
-       throw(ErrorException("type $T is not supported"))
-    end   
+    if !prettyfiable(val)
+       ty = typeof(val)
+       throw(ErrorException("type $ty is not supported"))
+    end
     prettyFloat(string(val), intGroup, fracGroup, intSep, fltSep)
 end
 stringpretty(val::Real, intGroup::Int, fracGroup::Int, sep::Char=betweenFlts()) =
@@ -111,50 +113,50 @@ function stringpretty(val::Real)
     stringpretty(val, group, group, sep, sep)
 end
 
-
 # show easy-to-read numbers
 
 showpretty(io::IO, val::Signed, group::Int, sep::Char=betweenInts()) =
-    show(io, stringpretty(val, group, sep))
+    print(io, stringpretty(val, group, sep))
 showpretty(io::IO, val::Signed, sep::Char, group::Int=intsSpanned()) =
-    show(io, stringpretty(val, group, sep))
+    print(io, stringpretty(val, group, sep))
 function showpretty(io::IO, val::Signed)
     group, sep = intsSpanned(), betweenInts()
-    show(io, stringpretty(val, group, sep))
+    print(io, stringpretty(val, group, sep))
 end
 
 showpretty{T<:Signed}(io::IO, val::Rational{T}, group::Int, sep::Char=betweenInts()) =
-    string(prettyInteger(val.num, group, sep),"//",prettyInteger(val.den, group, sep))
+    print(io,prettyInteger(val.num, group, sep),"//",prettyInteger(val.den, group, sep))
 showpretty{T<:Signed}(io::IO, val::Rational{T}, sep::Char, group::Int=intsSpanned()) =
-    show(io, stringpretty(val, group, sep))
+    print(io, stringpretty(val, group, sep))
 function showpretty{T<:Signed}(io::IO, val::Rational{T})
     group, sep = intsSpanned(), betweenInts()
-    show(io, stringpretty(val, group, sep))
+    print(io, stringpretty(val, group, sep))
 end
 
 function showpretty(io::IO, val::AbstractFloat)
     group, sep = fltsSpanned(), betweenFlts()
-    show(io, stringpretty(val, group, group, sep, sep))
+    print(io, stringpretty(val, group, group, sep, sep))
 end
 function showpretty(io::IO, val::AbstractFloat, group::Int)
     sep = betweenFlts()
-    show(io, stringpretty(val, group, group, sep, sep))
+    print(io, stringpretty(val, group, group, sep, sep))
 end
 function showpretty(io::IO, val::AbstractFloat, sep::Char)
     group = fltsSpanned()
-    show(io, stringpretty(val, group, group, sep, sep))
+    print(io, stringpretty(val, group, group, sep, sep))
 end
-showpretty(io::IO, val::AbstractFloat, prettyFormat...) = 
-    show(io, stringpretty(val, prettyFormat...))
+showpretty(io::IO, val::AbstractFloat, prettyFormat...) =
+    print(io, stringpretty(val, prettyFormat...))
 
 
 
-function showpretty(io::IO, val::Real, 
+function showpretty(io::IO, val::Real,
           intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char)
-    if !prettyfiable(v)
-       throw(ErrorException("type $T is not supported"))
-    end   
-    showpretty(io, stringpretty(val, intGroup, fracGroup, intSep, fltSep))
+    if !prettyfiable(val)
+       ty = typeof(val)
+       throw(ErrorException("type $ty is not supported"))
+    end
+    print(io, stringpretty(val, intGroup, fracGroup, intSep, fltSep))
 end
 function showpretty(io::IO, val::Real)
     group, sep = fltsSpanned(), betweenFlts()
@@ -168,8 +170,8 @@ function showpretty(io::IO, val::Real, sep::Char)
     group = fltsSpanned()
     showpretty(io, val, group, group, sep, sep)
 end
-showpretty(io::IO, val::Real, prettyFormat...) = 
-    show(io, stringpretty(val, prettyFormat...))
+showpretty(io::IO, val::Real, prettyFormat...) =
+    print(io, stringpretty(val, prettyFormat...))
 
 
 # show on STDOUT
@@ -196,23 +198,23 @@ end
 function showpretty(val::AbstractFloat, intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char)
     showpretty(Base.STDOUT, val, intGroup, fracGroup, intSep, fltSep)
 end
-showpretty(val::AbstractFloat, group::Int) = 
+showpretty(val::AbstractFloat, group::Int) =
     showpretty(Base.STDOUT, val, group)
-showpretty(val::AbstractFloat, sep::Char)  = 
+showpretty(val::AbstractFloat, sep::Char)  =
     showpretty(Base.STDOUT, val, sep)
 showpretty(val::AbstractFloat, prettyFormat...) =
     showpretty(Base.STDOUT, val, prettyFormat...)
 
 
 function showpretty{T<:Real}(val::T, intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char)
-    if !prettyfiable(v)
+    if !prettyfiable(val)
        throw(ErrorException("type $T is not supported"))
-    end   
+    end
     showpretty(Base.STDOUT, val, intGroup, fracGroup, intSep, fltSep)
 end
-showpretty(val::Real, group::Int) = 
+showpretty(val::Real, group::Int) =
     showpretty(Base.STDOUT, val, group)
-showpretty(val::Real, sep::Char)  = 
+showpretty(val::Real, sep::Char)  =
     showpretty(Base.STDOUT, val, sep)
 showpretty(val::Real, prettyFormat...) =
     showpretty(Base.STDOUT, val, prettyFormat...)
@@ -220,23 +222,23 @@ showpretty(val::Real, prettyFormat...) =
 
 # accept integers and floats
 
-prettyInteger{T<:Signed}(v::T, group::Int, span::Char) = 
-    integerString(string(v), group, span)
+prettyInteger{T<:Signed}(val::T, group::Int, span::Char) =
+    integerString(string(val), group, span)
 
-prettyFloat{T<:AbstractFloat}(v::T, 
-  intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char) = 
-    prettyFloat(string(v), intGroup, fracGroup, intSep, fltSep)
+prettyFloat{T<:AbstractFloat}(val::T,
+  intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char) =
+    prettyFloat(string(val), intGroup, fracGroup, intSep, fltSep)
 
-prettyFloat{T<:AbstractFloat}(v::T, 
-  intGroup::Int, fracGroup::Int, span::Char) = 
-    prettyFloat(string(v), intGroup, fracGroup, span, span)
+prettyFloat{T<:AbstractFloat}(val::T,
+  intGroup::Int, fracGroup::Int, span::Char) =
+    prettyFloat(string(val), intGroup, fracGroup, span, span)
 
-prettyFloat{T<:AbstractFloat}(v::T, 
-  group::Int, intSep::Char, fltSep::Char) = 
-    prettyFloat(string(v), group, intSep, fltSep)
+prettyFloat{T<:AbstractFloat}(val::T,
+  group::Int, intSep::Char, fltSep::Char) =
+    prettyFloat(string(val), group, intSep, fltSep)
 
-prettyFloat{T<:AbstractFloat}(v::T,  group::Int, span::Char) = 
-    prettyFloat(string(v), group, span, span)
+prettyFloat{T<:AbstractFloat}(val::T,  group::Int, span::Char) =
+    prettyFloat(string(val), group, span, span)
 
 # handle integer and float strings
 
@@ -246,7 +248,7 @@ else
    splitstr(str::String, at::String) = map(bytestring, split(str, at))
 end
 
-prettyInteger(s::String, group::Int, span::Char) = 
+prettyInteger(s::String, group::Int, span::Char) =
     integerString(s, group, span)
 
 function prettyFloat(s::String, intGroup::Int, fracGroup::Int, intSep::Char, fltSep::Char)
@@ -256,7 +258,7 @@ function prettyFloat(s::String, intGroup::Int, fracGroup::Int, intSep::Char, flt
         else
            s, ""
         end
-        
+
     istr = integerString(sinteger, intGroup, intSep)
     if sfrac == ""
        istr
@@ -266,13 +268,13 @@ function prettyFloat(s::String, intGroup::Int, fracGroup::Int, intSep::Char, flt
     end
 end
 
-prettyFloat(s::String, group::Int, span::Char) = 
+prettyFloat(s::String, group::Int, span::Char) =
     prettyFloat(s, group, group, span, span)
 
-prettyFloat(s::String, group::Int, intSep::Char, fltSep::Char) = 
+prettyFloat(s::String, group::Int, intSep::Char, fltSep::Char) =
     prettyFloat(s, group, group, intSep, fltSep)
 
-prettyFloat(s::String, intsSpanned::Int, fracGroup::Int, span::Char) = 
+prettyFloat(s::String, intsSpanned::Int, fracGroup::Int, span::Char) =
     prettyFloat(s, intGroup, fracGroup, span, span)
 
 # do the work
@@ -287,7 +289,7 @@ function nonnegIntegerString(s::String, group::Int, span::Char)
         else
            s, ""
         end
-    
+
     n = length(sinteger)
 
     fullgroups, finalgroup = divrem(n, group)
@@ -295,7 +297,7 @@ function nonnegIntegerString(s::String, group::Int, span::Char)
     sv = convert(Vector{Char},sinteger)
     p = repeat(" ", n+(fullgroups-1)+(finalgroup!=0))
     pretty = convert(Vector{Char},p)
-   
+
     sourceidx = n
     targetidx = length(pretty)
     for k in fullgroups:-1:1
@@ -307,12 +309,12 @@ function nonnegIntegerString(s::String, group::Int, span::Char)
             targetidx -= 1
         end
     end
-   
+
     if finalgroup > 0
-        if fullgroups > 0 
+        if fullgroups > 0
             pretty[targetidx] = span
             targetidx -= 1
-        end     
+        end
         pretty[(targetidx-finalgroup+1):targetidx] = sv[(sourceidx-finalgroup+1):sourceidx]
     end
 
@@ -332,19 +334,19 @@ function integerString(s::String, group::Int, span::Char)
        s1 = string(s[2:end])
        pretty = nonnegIntegerString(s1, group, span)
        string("-", pretty)
-    end    
-end    
+    end
+end
 
 function fractionalString(s::String, group::Int, span::Char)
     sfrac, sexponent =
         if contains(s,"e")
-           split(s,"e")
+           map(String, split(s,"e"))
         else
            s, ""
         end
-    
+
     pretty = reverse(nonnegIntegerString(reverse(sfrac), group, span))
-    
+
     if length(sexponent) != 0
        string(pretty,"e",sexponent)
     else
@@ -406,16 +408,16 @@ betweenFlts(s::String) = betweenFlts!(s[1])
 # is this a type that can be handled above
 function prettyfiable{T<:Real}(val::T)
     try
-        convert(BigFloat,v); true
+        convert(BigFloat,val); true
     catch
         false
-    end        
+    end
 end
 
 # parse pretty numeric strings
-parse{T<:Union{Signed,AbstractFloat}}(::Type{T}, s::String, ch::Char) = 
+parse{T<:Union{Signed,AbstractFloat}}(::Type{T}, s::String, ch::Char) =
     parse(T, join(split(s,ch),""))
-parse{T<:AbstractFloat}(::Type{T}, s::String, ch1::Char, ch2::Char) = 
+parse{T<:AbstractFloat}(::Type{T}, s::String, ch1::Char, ch2::Char) =
     parse(T, join(split(s,(ch1,ch2)),""))
 
-end # module
+# end # module
